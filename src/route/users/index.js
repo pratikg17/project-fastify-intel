@@ -1,10 +1,11 @@
-const UserService = require('../../service/user.service');
+const UserService = require('../../service/users.service');
+const RolesService = require('../../service/roles.service');
 const {
   postRequestBody,
   postResponseBody,
   getRequestparams,
   getResponseBody,
-} = require('./user.schema');
+} = require('./users.schema');
 
 // make sure to mark function as async
 const userRoute = async (fastify) => {

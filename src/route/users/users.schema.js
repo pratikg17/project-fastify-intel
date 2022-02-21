@@ -66,9 +66,16 @@ const getRequestparams = {
 const getResponseBody = {
   200: {
     type: 'object',
-    required: ['id', 'username', 'email', 'createdAt', 'updatedAt', 'version'],
+    required: [
+      'userId',
+      'username',
+      'email',
+      'createdAt',
+      'updatedAt',
+      'version',
+    ],
     properties: {
-      id: {
+      userId: {
         type: 'string',
         format: 'uuid',
       },

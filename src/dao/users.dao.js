@@ -1,3 +1,5 @@
+const roleDao = require('./roles.dao');
+
 const userRepository = (db) => {
   // Get user by user id
   const getUserById = async (userId) => {
@@ -23,18 +25,21 @@ const userRepository = (db) => {
   // save user in db
   const saveUser = async (user) => {
     try {
-      const { id } = await db.one(
-        'INSERT INTO users(first_name, middle_name, last_name, password, email) VALUES($1, $2, $3, $4, $5) RETURNING id',
+      const investorRoleId = await roleDao(db).getInvestorRole();
+      const { user_id } = await db.one(
+        'INSERT INTO users(first_name, last_name, username, password, email, role_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING user_id',
         [
           user.firstName,
-          user.middleName,
           user.lastName,
+          user.userName,
           user.password,
           user.email,
+          investorRoleId.role_id,
         ]
       );
-      return id;
+      return user_id;
     } catch (error) {
+      console.log(error.message);
       throw Error('Not valid user data - failed to save in db');
     }
   };

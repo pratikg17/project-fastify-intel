@@ -3,7 +3,7 @@ const cors = require('fastify-cors');
 const db = require('./plugin/database');
 const testRoute = require('./route/tempTestRoute');
 const swaggerPg = require('./plugin/swagger');
-const userRoute = require('./route/user');
+const userRoute = require('./route/users');
 const jobRoute = require('./route/job');
 
 const authenticate = require('./plugin/authenticate');

@@ -1,5 +1,5 @@
 const moment = require('moment');
-const UserRepository = require('../dao/user.dao');
+const UserRepository = require('../dao/users.dao');
 
 const userService = (fastify) => {
   const userRepository = UserRepository(fastify.db);
