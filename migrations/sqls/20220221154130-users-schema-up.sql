@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
  user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+ username TEXT NOT NULL,
  first_name TEXT NOT NULL,
  last_name TEXT NOT NULL,
  email TEXT NOT NULL,

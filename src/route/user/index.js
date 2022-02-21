@@ -8,7 +8,8 @@ const {
 
 // make sure to mark function as async
 const userRoute = async (fastify) => {
-  const { getUserById, createUser, getUserByEmailId } = UserService(fastify);
+  const { getUserById, createInvestorUser, getUserByEmailId } =
+    UserService(fastify);
 
   fastify.get(
     '/:userId',
@@ -47,7 +48,7 @@ const userRoute = async (fastify) => {
     async (request, reply) => {
       fastify.log.info('creating user');
       try {
-        const userId = await createUser(request.body);
+        const userId = await createInvestorUser(request.body);
         fastify.log.info(`user created with ${userId}`);
         reply.code(201).send({ userId });
       } catch (error) {

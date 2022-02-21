@@ -1,11 +1,14 @@
 const postRequestBody = {
   type: 'object',
-  required: ['firstName', 'password', 'email'],
+  required: ['firstName', 'password', 'email', 'userName'],
   properties: {
     firstName: {
       type: 'string',
     },
-    middleName: {
+    lastName: {
+      type: 'string',
+    },
+    userName: {
       type: 'string',
     },
     lastName: {
@@ -13,7 +16,7 @@ const postRequestBody = {
     },
     password: {
       type: 'string',
-      minLength: 8,
+      minLength: 3,
     },
     email: {
       type: 'string',
@@ -72,6 +75,12 @@ const getResponseBody = {
       username: {
         type: 'string',
       },
+      firstName: {
+        type: 'string',
+      },
+      lastName: {
+        type: 'string',
+      },
       email: {
         type: 'string',
         format: 'email',
@@ -80,9 +89,6 @@ const getResponseBody = {
         type: 'string',
       },
       updatedAt: {
-        type: 'string',
-      },
-      version: {
         type: 'string',
       },
     },

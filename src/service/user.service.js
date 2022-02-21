@@ -6,18 +6,15 @@ const userService = (fastify) => {
 
   const getUserById = async (userId) => {
     const user = await userRepository.getUserById(userId);
-    const username = [user.first_name, user.middle_name, user.last_name]
-      .filter((name) => name !== '')
-      .filter((name) => name !== null)
-      .filter((name) => name !== undefined)
-      .join(' ');
+
     return {
       id: user.id,
-      username,
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
       createdAt: moment(user.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
-      version: user.version,
     };
   };
 
@@ -28,28 +25,24 @@ const userService = (fastify) => {
       throw Error('Password is not valid!');
     }
 
-    const username = [user.first_name, user.middle_name, user.last_name]
-      .filter((name) => name !== '')
-      .filter((name) => name !== null)
-      .filter((name) => name !== undefined)
-      .join(' ');
     return {
       id: user.id,
-      username,
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
       email: user.email,
       createdAt: moment(user.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
-      version: user.version,
     };
   };
 
   // save user in db and return id
-  const createUser = async (user) => {
+  const createInvestorUser = async (user) => {
     const userId = await userRepository.saveUser(user);
     return userId;
   };
 
-  return { getUserById, createUser, getUserByEmailId };
+  return { getUserById, createInvestorUser, getUserByEmailId };
 };
 
 module.exports = userService;
