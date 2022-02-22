@@ -1,3 +1,4 @@
+const { createPasswordHash } = require('../plugin/helper/bcrypt');
 const roleDao = require('./roles.dao');
 
 const userRepository = (db) => {
@@ -26,13 +27,17 @@ const userRepository = (db) => {
   const saveUser = async (user) => {
     try {
       const investorRoleId = await roleDao(db).getInvestorRole();
+
+      console.log(createPasswordHash);
+      const password = await createPasswordHash(user.password);
+
       const { user_id } = await db.one(
         'INSERT INTO users(first_name, last_name, username, password, email, role_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING user_id',
         [
           user.firstName,
           user.lastName,
           user.userName,
-          user.password,
+          password,
           user.email,
           investorRoleId.role_id,
         ]
