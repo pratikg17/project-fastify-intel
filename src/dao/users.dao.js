@@ -37,7 +37,6 @@ const userRepository = (db) => {
   const getAdminByUsername = async (userName) => {
     try {
       const user = await db.one(
-        // 'select * from users where username = $1 join ',
         "select * from users u join roles r on r.role_id  = u.role_id  where r.type = 'ADMIN' and username = $1",
         [userName]
       );
