@@ -9,8 +9,12 @@ const {
 
 // make sure to mark function as async
 const userRoute = async (fastify) => {
-  const { getUserById, createInvestorUser, getUserByEmailId } =
-    UserService(fastify);
+  const {
+    getUserById,
+    createInvestorUser,
+    getUserByEmailId,
+    getInvestorAuthetication,
+  } = UserService(fastify);
 
   fastify.get(
     '/:userId',
@@ -31,6 +35,23 @@ const userRoute = async (fastify) => {
       const { email, password } = request.body;
 
       const user = await getUserByEmailId(email, password);
+
+      // create jwt token
+      const token = fastify.jwt.sign(user);
+
+      reply.code(200).send({ token: `Bearer ${token}` });
+    } catch (err) {
+      reply.code(401).send({
+        message: err.message,
+      });
+    }
+  });
+
+  fastify.post('/investor-login', async (request, reply) => {
+    try {
+      const { userName, password } = request.body;
+
+      const user = await getInvestorAuthetication(userName, password);
 
       // create jwt token
       const token = fastify.jwt.sign(user);
