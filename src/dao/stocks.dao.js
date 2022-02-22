@@ -1,10 +1,20 @@
 const dao = (db) => {
-  const getAllStocks = async (limit, offset) => {
+  const getStocksDao = async (limit, offset) => {
     try {
       const stocks = await db.query(
         `select * from stocks order by created_at limit $1 offset $2`,
         [limit, offset]
       );
+
+      return stocks;
+    } catch (error) {
+      throw Error('failed to fetch stocks records from db');
+    }
+  };
+
+  const getAllStocksDao = async () => {
+    try {
+      const stocks = await db.query(`select * from stocks order by created_at`);
 
       return stocks;
     } catch (error) {
@@ -61,9 +71,10 @@ const dao = (db) => {
   };
 
   return {
-    getAllStocks,
+    getAllStocksDao,
     createNewStock,
     updateStock,
+    getStocksDao,
   };
 };
 

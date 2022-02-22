@@ -4,7 +4,7 @@ const { postRequestBody, queryParameter } = require('./stocks.schema');
 
 // mark this function as async - required
 const stockRoute = async (fastify) => {
-  const { createStock, getStocks } = StockService(fastify);
+  const { createStock, getStocks, getAllStocks } = StockService(fastify);
 
   fastify.get(
     '/',
@@ -20,6 +20,15 @@ const stockRoute = async (fastify) => {
       reply.code(200).send({ stocks });
     }
   );
+
+  fastify.get('/get-all-stocks', async (request, reply) => {
+    // authenticate request
+    // append user request.user
+    await fastify.authenticate(request, reply);
+
+    const stocks = await getAllStocks();
+    reply.code(200).send({ stocks });
+  });
 
   fastify.post(
     '/',
