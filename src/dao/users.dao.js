@@ -34,6 +34,19 @@ const userRepository = (db) => {
     }
   };
 
+  const getAdminByUsername = async (userName) => {
+    try {
+      const user = await db.one(
+        // 'select * from users where username = $1 join ',
+        "select * from users u join roles r on r.role_id  = u.role_id  where r.type = 'ADMIN' and username = $1",
+        [userName]
+      );
+      return user;
+    } catch {
+      throw Error(`${userName} does not exist!`);
+    }
+  };
+
   // save user in db
   const saveUser = async (user) => {
     try {
@@ -60,7 +73,13 @@ const userRepository = (db) => {
     }
   };
 
-  return { getUserById, saveUser, getUserByEmailId, getUserByUsername };
+  return {
+    getUserById,
+    saveUser,
+    getUserByEmailId,
+    getUserByUsername,
+    getAdminByUsername,
+  };
 };
 
 module.exports = userRepository;

@@ -36,6 +36,24 @@ const userService = (fastify) => {
     };
   };
 
+  const getAdminAuthetication = async (email, password) => {
+    const user = await userRepository.getAdminByUsername(email);
+
+    if (user.password !== password) {
+      throw Error('Password is not valid!');
+    }
+
+    return {
+      id: user.id,
+      username: user.username,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      email: user.email,
+      createdAt: moment(user.created_at).format('DD/MM/YYYY'),
+      updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+    };
+  };
+
   const getInvestorAuthetication = async (userName, password) => {
     const user = await userRepository.getUserByUsername(userName);
 
@@ -67,6 +85,7 @@ const userService = (fastify) => {
     createInvestorUser,
     getUserByEmailId,
     getInvestorAuthetication,
+    getAdminAuthetication,
   };
 };
 

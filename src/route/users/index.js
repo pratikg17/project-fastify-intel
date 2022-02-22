@@ -14,6 +14,7 @@ const userRoute = async (fastify) => {
     createInvestorUser,
     getUserByEmailId,
     getInvestorAuthetication,
+    getAdminAuthetication,
   } = UserService(fastify);
 
   fastify.get(
@@ -52,6 +53,23 @@ const userRoute = async (fastify) => {
       const { userName, password } = request.body;
 
       const user = await getInvestorAuthetication(userName, password);
+
+      // create jwt token
+      const token = fastify.jwt.sign(user);
+
+      reply.code(200).send({ token: `Bearer ${token}` });
+    } catch (err) {
+      reply.code(401).send({
+        message: err.message,
+      });
+    }
+  });
+
+  fastify.post('/admin-login', async (request, reply) => {
+    try {
+      const { userName, password } = request.body;
+
+      const user = await getAdminAuthetication(userName, password);
 
       // create jwt token
       const token = fastify.jwt.sign(user);
