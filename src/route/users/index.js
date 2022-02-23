@@ -15,6 +15,9 @@ const userRoute = async (fastify) => {
     getUserByEmailId,
     getInvestorAuthetication,
     getAdminAuthetication,
+    creditInvestorFunds,
+    debitInvestorFunds,
+    getInvestorFundBalance,
   } = UserService(fastify);
 
   fastify.get(
@@ -80,6 +83,33 @@ const userRoute = async (fastify) => {
         message: err.message,
       });
     }
+  });
+
+  fastify.post('/add-investor-funds', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const funds = request.body;
+    const transaction = await creditInvestorFunds(funds);
+    reply.code(201).send({ transaction });
+  });
+
+  fastify.post('/debit-investor-funds', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const funds = request.body;
+    const transaction = await debitInvestorFunds(funds);
+    reply.code(201).send({ transaction });
+  });
+
+  fastify.post('/get-investor-balance', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const funds = request.body;
+    const balance = await getInvestorFundBalance(funds.userId);
+    reply.code(201).send({
+      balance: balance,
+      userId: funds.userId,
+    });
   });
 
   fastify.post(

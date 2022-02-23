@@ -72,10 +72,46 @@ const userRepository = (db) => {
     }
   };
 
-  const addInvestorFundsDao = async (funds) => {
+  const creditInvestorFundsDao = async (funds) => {
     try {
-      const user = await db.one('select * from users where id = $1', [userId]);
-      return user;
+      const trasaction = await db.one(
+        `INSERT INTO investor_funds
+      (debit_amount, credit_amount, description, user_id, "transaction_type", trasactiondate)
+      VALUES(0, $1, 'Added funds to wallet', $2, 'CREDIT', now()) returning *;
+      `,
+        [funds.amount, funds.userId]
+      );
+      return trasaction;
+    } catch (err) {
+      console.log(err);
+      throw Error(`${funds.userId} does not exist`);
+    }
+  };
+
+  const debitInvestorFundsDao = async (funds) => {
+    try {
+      const trasaction = await db.one(
+        `INSERT INTO investor_funds
+      (debit_amount, credit_amount, description, user_id, "transaction_type", trasactiondate)
+      VALUES($1, 0,  $2, $3, 'DEBIT', now())  returning *;
+      `,
+        [funds.amount, 'Debited funds from wallet', funds.userId]
+      );
+      return trasaction;
+    } catch {
+      throw Error(`${funds.userId} does not exist`);
+    }
+  };
+
+  const getInvestorFundBalanceDao = async (userId) => {
+    try {
+      const { balance } = await db.one(
+        `select coalesce((sum(credit_amount) - sum (debit_amount)),0 ) as "balance" from investor_funds   
+        where user_id =$1;
+      `,
+        [userId]
+      );
+      return balance;
     } catch {
       throw Error(`${userId} does not exist`);
     }
@@ -87,7 +123,9 @@ const userRepository = (db) => {
     getUserByEmailId,
     getUserByUsername,
     getAdminByUsername,
-    addInvestorFundsDao,
+    creditInvestorFundsDao,
+    debitInvestorFundsDao,
+    getInvestorFundBalanceDao,
   };
 };
 

@@ -80,12 +80,30 @@ const userService = (fastify) => {
     return userId;
   };
 
+  const creditInvestorFunds = async (funds) => {
+    const transaction = await userRepository.creditInvestorFundsDao(funds);
+    return transaction;
+  };
+
+  const debitInvestorFunds = async (funds) => {
+    const transaction = await userRepository.debitInvestorFundsDao(funds);
+    return transaction;
+  };
+
+  const getInvestorFundBalance = async (userId) => {
+    const balance = await userRepository.getInvestorFundBalanceDao(userId);
+    return balance;
+  };
+
   return {
     getUserById,
     createInvestorUser,
     getUserByEmailId,
     getInvestorAuthetication,
     getAdminAuthetication,
+    creditInvestorFunds,
+    debitInvestorFunds,
+    getInvestorFundBalance,
   };
 };
 
