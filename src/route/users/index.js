@@ -18,6 +18,7 @@ const userRoute = async (fastify) => {
     creditInvestorFunds,
     debitInvestorFunds,
     getInvestorFundBalance,
+    getAllInvestorWalletHistory,
   } = UserService(fastify);
 
   fastify.get(
@@ -109,6 +110,16 @@ const userRoute = async (fastify) => {
     reply.code(201).send({
       balance: balance,
       userId: funds.userId,
+    });
+  });
+
+  fastify.post('/get-investor-wallet-transaction', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const funds = request.body;
+    const transaction = await getAllInvestorWalletHistory(funds.userId);
+    reply.code(201).send({
+      transaction,
     });
   });
 

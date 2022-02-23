@@ -95,6 +95,22 @@ const userService = (fastify) => {
     return balance;
   };
 
+  const getInvestorWalletHistory = async (userId, offset, limit) => {
+    const transactions = await userRepository.getInvestorFundBalanceDao(
+      userId,
+      offset,
+      limit
+    );
+    return transactions;
+  };
+
+  const getAllInvestorWalletHistory = async (userId) => {
+    const transactions = await userRepository.getAllInvestorWalletHistoryDao(
+      userId
+    );
+    return transactions;
+  };
+
   return {
     getUserById,
     createInvestorUser,
@@ -104,6 +120,8 @@ const userService = (fastify) => {
     creditInvestorFunds,
     debitInvestorFunds,
     getInvestorFundBalance,
+    getAllInvestorWalletHistory,
+    getInvestorWalletHistory,
   };
 };
 

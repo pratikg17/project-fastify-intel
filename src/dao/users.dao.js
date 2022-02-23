@@ -117,6 +117,28 @@ const userRepository = (db) => {
     }
   };
 
+  const getInvestorWalletHistoryDao = async (userId, limit, offset) => {
+    try {
+      const wallet = await db.query(
+        `select * from investor_funds where user_id = $1 limit $2 offset $3`,
+        [userId, limit, offset]
+      );
+
+      return wallet;
+    } catch (error) {
+      throw Error('failed to fetch investor_funds records from db');
+    }
+  };
+
+  const getAllInvestorWalletHistoryDao = async () => {
+    try {
+      const wallet = await db.query(`select * from investor_funds`);
+      return wallet;
+    } catch (error) {
+      throw Error('failed to fetch investor_funds records from db');
+    }
+  };
+
   return {
     getUserById,
     saveUser,
@@ -126,6 +148,8 @@ const userRepository = (db) => {
     creditInvestorFundsDao,
     debitInvestorFundsDao,
     getInvestorFundBalanceDao,
+    getAllInvestorWalletHistoryDao,
+    getInvestorWalletHistoryDao,
   };
 };
 
