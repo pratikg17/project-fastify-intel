@@ -2,12 +2,16 @@ const moment = require('moment');
 const StockRepository = require('../dao/stocks.dao');
 
 const stockService = (fastify) => {
-  const { createNewStock, getStocksDao, getAllStocksDao } = StockRepository(
-    fastify.db
-  );
+  const { createNewStock, getStocksDao, getAllStocksDao, updateStockDao } =
+    StockRepository(fastify.db);
 
   const createStock = async (stock) => {
     const stockId = await createNewStock(stock);
+    return stockId;
+  };
+
+  const updateStock = async (stock) => {
+    const stockId = await updateStockDao(stock);
     return stockId;
   };
 
@@ -45,7 +49,7 @@ const stockService = (fastify) => {
     }));
   };
 
-  return { createStock, getStocks, getAllStocks };
+  return { createStock, getStocks, getAllStocks, updateStock };
 };
 
 module.exports = stockService;
