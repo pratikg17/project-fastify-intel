@@ -5,6 +5,7 @@ CREATE TABLE investor_funds (
  credit_amount REAL NOT NULL,
  description TEXT,
  user_id UUID NOT NULL,
+ transaction_type TRANSACTION_TYPE NOT NULL,
  trasactionDate timestamptz NOT NULL DEFAULT now() ,
  created_at timestamptz NOT NULL DEFAULT now(),
  updated_at timestamptz NOT NULL DEFAULT now(),

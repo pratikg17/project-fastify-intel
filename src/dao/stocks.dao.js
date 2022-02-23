@@ -61,7 +61,6 @@ const dao = (db) => {
         ]
       );
       return stockUpdated;
-      console.log('stockUpdatedstockUpdatedstockUpdated', stockUpdated);
     } catch (error) {
       console.log(error);
       throw Error('Not valid stock data - failed to save in db');

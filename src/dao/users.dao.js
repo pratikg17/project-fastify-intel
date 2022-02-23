@@ -72,12 +72,22 @@ const userRepository = (db) => {
     }
   };
 
+  const addInvestorFundsDao = async (funds) => {
+    try {
+      const user = await db.one('select * from users where id = $1', [userId]);
+      return user;
+    } catch {
+      throw Error(`${userId} does not exist`);
+    }
+  };
+
   return {
     getUserById,
     saveUser,
     getUserByEmailId,
     getUserByUsername,
     getAdminByUsername,
+    addInvestorFundsDao,
   };
 };
 
