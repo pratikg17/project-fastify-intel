@@ -80,6 +80,7 @@ tasks:
         PORT: 8080
         POSTGRES_URI: postgres://app:password@db/db
         JWT_SECRET: supersecretvalue
+        TZ: America/New_York
       container: build-stock-fastify-env
       command: npm run start
       ports:

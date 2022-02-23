@@ -6,6 +6,7 @@ const server = require('./src/app')({
   logger: {
     level: 'info',
     prettyPrint: true,
+    colorize: true,
   },
 });
 
