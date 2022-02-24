@@ -1,11 +1,11 @@
 const moment = require('moment');
-const OrderService = require('../../service/Orders.service');
+const OrderService = require('../../service/orders.service');
 const { postRequestBody, queryParameter } = require('./Orders.schema');
 
 // mark this function as async - required
-const stockRoute = async (fastify) => {
-  const { createStock, getOrders, getAllOrders, updateStock } =
-    OrdersService(fastify);
+const orderRoute = async (fastify) => {
+  const { createOrder, getOrders, getAllOrders, updateOrder } =
+    OrderService(fastify);
 
   fastify.get(
     '/',
@@ -17,8 +17,8 @@ const stockRoute = async (fastify) => {
 
       const { limit, offset } = request.query;
 
-      const Orders = await getOrders(limit, offset);
-      reply.code(200).send({ Orders });
+      const orders = await getOrders(limit, offset);
+      reply.code(200).send({ orders });
     }
   );
 
@@ -27,8 +27,8 @@ const stockRoute = async (fastify) => {
     // append user request.user
     await fastify.authenticate(request, reply);
 
-    const Orders = await getAllOrders();
-    reply.code(200).send({ Orders });
+    const orders = await getAllOrders();
+    reply.code(200).send({ orders });
   });
 
   fastify.post(
@@ -40,16 +40,30 @@ const stockRoute = async (fastify) => {
       // authenticate request
       await fastify.authenticate(request, reply);
 
-      const stock = request.body;
+      const order = request.body;
 
-      const stockId = await createStock(stock);
+      const orderId = await createOrder(order);
 
-      reply.code(201).send({ stockId });
+      reply.code(201).send({ orderId });
     }
   );
 
   fastify.post(
-    '/update-stock',
+    '/place-order',
+    {
+      schema: { body: postRequestBody },
+    },
+    async (request, reply) => {
+      // authenticate request
+      await fastify.authenticate(request, reply);
+      const order = request.body;
+      const orderData = await createOrder(order);
+      reply.code(201).send({ orderId: orderData.order_id });
+    }
+  );
+
+  fastify.post(
+    '/update-order',
     {
       schema: { body: postRequestBody },
     },
@@ -57,13 +71,13 @@ const stockRoute = async (fastify) => {
       // authenticate request
       await fastify.authenticate(request, reply);
 
-      const stock = request.body;
+      const order = request.body;
 
-      const stockId = await updateStock(stock);
+      const orderId = await updateOrder(order);
 
-      reply.code(201).send({ stockId });
+      reply.code(201).send({ orderId });
     }
   );
 };
 
-module.exports = stockRoute;
+module.exports = orderRoute;

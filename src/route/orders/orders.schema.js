@@ -6,7 +6,8 @@ const postRequestBody = {
     'quantity',
     'orderType',
     'tradeType',
-    'exipryDate',
+    'expiryDate',
+    'amount',
   ],
   properties: {
     stockId: {

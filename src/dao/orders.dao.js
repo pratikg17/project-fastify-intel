@@ -49,10 +49,10 @@ const dao = (db) => {
 
   const createNewOrder = async (order) => {
     try {
-      const order = await db.one(
+      const orderData = await db.one(
         `INSERT INTO orders
         (user_id, stock_id, quantity, amount, order_type, trade_type, order_status, expiry_date)
-        VALUES( $1, $2, $3, $4, $5, $6', 'PLACED', $7) RETURNING  *`,
+        VALUES( $1, $2, $3, $4, $5, $6, 'PLACED', $7) RETURNING  *`,
         [
           order.userId,
           order.stockId,
@@ -63,7 +63,7 @@ const dao = (db) => {
           order.expiryDate,
         ]
       );
-      return order_id;
+      return orderData;
     } catch (error) {
       console.log(error.message);
       throw Error('Not valid order data - failed to save in db');
@@ -73,10 +73,10 @@ const dao = (db) => {
   const updateOrderDao = async (order) => {
     try {
       //  Yearly High / Low , Daily High / Low and current price will be the same
-      const orderUpdated = await db.one(
+      const { order_id } = await db.one(
         `UPDATE orders
         SET  fulfilled_quantity=$1, quantity=$2, amount=$3, "order_type"=$4,  expiry_date=$5, order_status = $6
-        WHERE order_id= '7cbcc31b-2b29-4c13-bcdc-fc00774d049e' RETURNING  *`,
+        WHERE order_id= $7 RETURNING  *`,
         [
           order.fulfilledQuantity,
           order.quantity,
@@ -87,7 +87,7 @@ const dao = (db) => {
           order.orderId,
         ]
       );
-      return orderUpdated;
+      return order_id;
     } catch (error) {
       console.log(error);
       throw Error('Not valid order data - failed to save in db');

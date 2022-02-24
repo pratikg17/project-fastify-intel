@@ -7,6 +7,7 @@ const swaggerPg = require('./plugin/swagger');
 const userRoute = require('./route/users');
 const jobRoute = require('./route/job');
 const stockRoute = require('./route/stocks');
+const orderRoute = require('./route/orders');
 
 const authenticate = require('./plugin/authenticate');
 
@@ -27,6 +28,7 @@ const build = (opts = {}) => {
   app.register(userRoute, { prefix: 'api/v1/users' });
   app.register(jobRoute, { prefix: 'api/v1/jobs' });
   app.register(stockRoute, { prefix: 'api/v1/stocks' });
+  app.register(orderRoute, { prefix: 'api/v1/orders' });
 
   app.get('/', async (request, reply) => {
     reply.code(200).send({ hello: 'world! done CI/CD' });
