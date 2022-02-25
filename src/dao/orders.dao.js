@@ -2,7 +2,8 @@ const dao = (db) => {
   const getOrdersDao = async (limit, offset) => {
     try {
       const orders = await db.query(
-        `select * from orders order by created_at limit $1 offset $2`,
+        `select * from orders o
+        inner join stocks s on s.stock_id  = o.stock_id order by o.created_at limit $1 offset $2`,
         [limit, offset]
       );
 
@@ -12,11 +13,12 @@ const dao = (db) => {
     }
   };
 
-  const getOrdersByUserIdDao = async (limit, offset, userId) => {
+  const getOrdersByUserIdDao = async (userId) => {
     try {
       const orders = await db.query(
-        `select * from orders  where user_id = $1 order by created_at limit $2 offset $3`,
-        [userId, limit, offset]
+        `select * from orders o
+        inner join stocks s on s.stock_id  = o.stock_id  where user_id = $1 order by o.created_at`,
+        [userId]
       );
 
       return orders;
@@ -27,7 +29,9 @@ const dao = (db) => {
 
   const getAllOrdersDao = async () => {
     try {
-      const orders = await db.query(`select * from orders`);
+      const orders = await db.query(
+        `select * from orders o inner join stocks s on s.stock_id  = o.stock_id `
+      );
 
       return orders;
     } catch (error) {
@@ -38,7 +42,7 @@ const dao = (db) => {
   const getAllOrdersByUserIdDao = async (userId) => {
     try {
       const orders = await db.query(
-        `select * from orders where userId=${userId}`
+        `select * from orders o inner join stocks s on s.stock_id  = o.stock_id  where userId=${userId}`
       );
 
       return orders;

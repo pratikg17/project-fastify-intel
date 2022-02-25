@@ -111,7 +111,24 @@ const queryParameter = {
   },
 };
 
+const queryParameterOrders = {
+  type: 'object',
+  required: ['user_id'],
+  properties: {
+    limit: {
+      type: 'number',
+    },
+    offset: {
+      type: 'number',
+    },
+    user_id: {
+      type: 'string',
+    },
+  },
+};
+
 module.exports = {
   postRequestBody,
   queryParameter,
+  queryParameterOrders,
 };

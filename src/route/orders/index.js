@@ -3,37 +3,34 @@ const OrderService = require('../../service/orders.service');
 const {
   postRequestBody,
   queryParameter,
+  queryParameterOrders,
   updateOrderRequestBody,
 } = require('./Orders.schema');
 
 // mark this function as async - required
 const orderRoute = async (fastify) => {
-  const { createOrder, getOrders, getAllOrders, updateOrder } =
+  const { createOrder, getAllOrders, getOrdersByUserId, updateOrder } =
     OrderService(fastify);
 
-  fastify.get(
-    '/',
-    { schema: { querystring: queryParameter } },
-    async (request, reply) => {
-      // authenticate request
-      // append user request.user
-      await fastify.authenticate(request, reply);
-
-      const { limit, offset } = request.query;
-
-      const orders = await getOrders(limit, offset);
-      reply.code(200).send({ orders });
-    }
-  );
-
   fastify.get('/get-all-orders', async (request, reply) => {
-    // authenticate request
-    // append user request.user
     await fastify.authenticate(request, reply);
 
     const orders = await getAllOrders();
     reply.code(200).send({ orders });
   });
+
+  fastify.get(
+    '/get-all-user-orders',
+    {
+      schema: { querystring: queryParameterOrders },
+    },
+    async (request, reply) => {
+      await fastify.authenticate(request, reply);
+      const { user_id } = request.query;
+      const orders = await getOrdersByUserId(user_id);
+      reply.code(200).send({ orders });
+    }
+  );
 
   fastify.post(
     '/',
