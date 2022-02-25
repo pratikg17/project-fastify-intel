@@ -111,7 +111,7 @@ const queryParameter = {
   },
 };
 
-const queryParameterOrders = {
+const queryParameterUserId = {
   type: 'object',
   required: ['user_id'],
   properties: {
@@ -139,7 +139,15 @@ const deleteOrderReqObj = {
 
 const addTradeReqObj = {
   type: 'object',
-  required: ['orderId', 'userId', 'stockId', 'quantity', 'tradeType', 'amount'],
+  required: [
+    'orderId',
+    'userId',
+    'stockId',
+    'quantity',
+    'tradeType',
+    'buy_amount',
+    'sell_amount',
+  ],
   properties: {
     orderId: {
       type: 'string',
@@ -153,7 +161,10 @@ const addTradeReqObj = {
     quantity: {
       type: 'number',
     },
-    amount: {
+    buy_amount: {
+      type: 'number',
+    },
+    sell_amount: {
       type: 'number',
     },
     tradeType: {
@@ -168,6 +179,11 @@ const addTradeReqObj = {
 module.exports = {
   postRequestBody,
   queryParameter,
-  queryParameterOrders,
+  queryParameterUserId,
   addTradeReqObj,
 };
+
+// select distinct  s.stock_name  , sum(quantity), avg(amount)  from trades t
+// join stocks s on s.stock_id  = t.stock_id
+// where user_id = '0c489c87-1503-48f9-9dfb-3138d78e49d2'
+// group by  s.stock_name

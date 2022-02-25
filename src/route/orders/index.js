@@ -3,7 +3,7 @@ const OrderService = require('../../service/orders.service');
 const {
   postRequestBody,
   queryParameter,
-  queryParameterOrders,
+  queryParameterUserId,
   updateOrderRequestBody,
   deleteOrderReqObj,
   addTradeReqObj,
@@ -18,6 +18,8 @@ const orderRoute = async (fastify) => {
     updateOrder,
     deleteOrder,
     addNewTrade,
+    getAllTrades,
+    getTradesByUserId,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -30,13 +32,33 @@ const orderRoute = async (fastify) => {
   fastify.get(
     '/get-all-user-orders',
     {
-      schema: { querystring: queryParameterOrders },
+      schema: { querystring: queryParameterUserId },
     },
     async (request, reply) => {
       await fastify.authenticate(request, reply);
       const { user_id } = request.query;
       const orders = await getOrdersByUserId(user_id);
       reply.code(200).send({ orders });
+    }
+  );
+
+  fastify.get('/get-all-trades', async (request, reply) => {
+    await fastify.authenticate(request, reply);
+
+    const trades = await getAllTrades();
+    reply.code(200).send({ trades });
+  });
+
+  fastify.get(
+    '/get-all-user-trades',
+    {
+      schema: { querystring: queryParameterUserId },
+    },
+    async (request, reply) => {
+      await fastify.authenticate(request, reply);
+      const { user_id } = request.query;
+      const trades = await getTradesByUserId(user_id);
+      reply.code(200).send({ trades });
     }
   );
 

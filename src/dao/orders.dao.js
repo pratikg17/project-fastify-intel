@@ -53,6 +53,19 @@ const dao = (db) => {
     }
   };
 
+  const getAllTradeDao = async () => {
+    try {
+      const trades = await db.query(
+        `select * from trades t 
+        inner join stocks s on s.stock_id  = t.stock_id`
+      );
+
+      return trades;
+    } catch (error) {
+      throw Error('failed to fetch trades records from db');
+    }
+  };
+
   const getAllOrdersByUserIdDao = async (userId) => {
     try {
       const orders = await db.query(
@@ -62,6 +75,19 @@ const dao = (db) => {
       return orders;
     } catch (error) {
       throw Error('failed to fetch orders records from db');
+    }
+  };
+
+  const getAllTradesByUserIdDao = async (userId) => {
+    try {
+      const trades = await db.query(
+        `select * from trades t 
+        inner join stocks s on s.stock_id  = t.stock_id where user_id = '${userId}'`
+      );
+
+      return trades;
+    } catch (error) {
+      throw Error('failed to fetch trades records from db');
     }
   };
 
@@ -116,14 +142,15 @@ const dao = (db) => {
     try {
       const tradeData = await db.one(
         `INSERT INTO trades
-        (order_id, user_id, stock_id, quantity, amount, "trade_type", trade_date)
-        VALUES($1, $2, $3, $4, $5, $6, $7) returning *`,
+        (order_id, user_id, stock_id, quantity, buy_amount, sell_amount, "trade_type", trade_date)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8) returning *`,
         [
           trade.orderId,
           trade.userId,
           trade.stockId,
           trade.quantity,
-          trade.amount,
+          trade.buy_amount,
+          trade.sell_amount,
           trade.tradeType,
           trade.tradeDate,
         ]
@@ -142,6 +169,8 @@ const dao = (db) => {
     getOrdersDao,
     getAllOrdersByUserIdDao,
     getOrdersByUserIdDao,
+    getAllTradesByUserIdDao,
+    getAllTradeDao,
     deleteOrderDao,
     recordNewTrade,
   };
