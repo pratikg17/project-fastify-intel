@@ -100,6 +100,11 @@ const ordersService = (fastify) => {
     return portfolioData;
   };
 
+  const fluctuateStockPrice = async () => {
+    console.log('Called fluctuateStockPrice');
+    return null;
+  };
+
   return {
     createOrder,
     getOrdersByUserId,
@@ -110,6 +115,7 @@ const ordersService = (fastify) => {
     getAllTrades,
     getTradesByUserId,
     getInvestorPortfolio,
+    fluctuateStockPrice,
   };
 };
 

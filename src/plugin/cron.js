@@ -1,8 +1,9 @@
 const fp = require('fastify-plugin');
 const fastifyCron = require('fastify-cron');
-const StockRepository = require('../dao/stocks.dao');
-
+const OrderService = require('../service/orders.service');
 module.exports = fp(async (fastify, options, next) => {
+  const { fluctuateStockPrice } = OrderService(fastify);
+
   fastify.register(fastifyCron, {
     jobs: [
       {
@@ -14,7 +15,11 @@ module.exports = fp(async (fastify, options, next) => {
         // Note: the callbacks (onTick & onComplete) take the server
         // as an argument, as opposed to nothing in the node-cron API:
         onTick: async (server) => {
+          console.log('Cronjob- start');
+          // await fluctuateStockPrice();
           // console.log(server);
+
+          return fluctuateStockPrice();
           //   console.log('Make change to stock prices');
           //   const { getAllStocksDao } = StockRepository(server.db);
           //   const stocks = await getAllStocksDao();

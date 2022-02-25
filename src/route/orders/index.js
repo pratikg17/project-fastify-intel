@@ -148,6 +148,14 @@ const orderRoute = async (fastify) => {
       reply.code(201).send({ tradeData });
     }
   );
+
+  fastify.post('/fluctuate-market', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const trade = request.body;
+    const tradeData = await addNewTrade(trade);
+    reply.code(201).send({ tradeData });
+  });
 };
 
 module.exports = orderRoute;
