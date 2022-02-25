@@ -1,6 +1,10 @@
 const moment = require('moment');
 const OrderService = require('../../service/orders.service');
-const { postRequestBody, queryParameter } = require('./Orders.schema');
+const {
+  postRequestBody,
+  queryParameter,
+  updateOrderRequestBody,
+} = require('./Orders.schema');
 
 // mark this function as async - required
 const orderRoute = async (fastify) => {
@@ -65,7 +69,7 @@ const orderRoute = async (fastify) => {
   fastify.post(
     '/update-order',
     {
-      schema: { body: postRequestBody },
+      schema: { body: updateOrderRequestBody },
     },
     async (request, reply) => {
       // authenticate request
