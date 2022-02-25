@@ -19,6 +19,19 @@ module.exports = fp(async (fastify, options, next) => {
           //   const { getAllStocksDao } = StockRepository(server.db);
           //   const stocks = await getAllStocksDao();
           //   console.log(stocks);
+          // 1.Check if market is open or not
+          // 2.Check if its holiday or not
+          // 3.Get the stocks
+          // 4.Create a function which will modify the price and volume
+          // 5.update all the stock prices
+          // 6.If it is the 5th minute store the data in record table
+          // 7.Execute the buy / sell orders
+          // 8.Get the user details and wallet
+          // 9.check if there is sufficent funds if not then reject the order insufficent funds
+          // 10. Update the order to executed if there is match for the stock
+          // 11. If buy then deduct the wallet
+          // 12. If sell order credit the wallet
+          // 13. Add the Trades
         },
       },
     ],
