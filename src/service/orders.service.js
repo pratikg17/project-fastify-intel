@@ -7,6 +7,7 @@ const ordersService = (fastify) => {
     getOrdersByUserIdDao,
     getAllOrdersDao,
     updateOrderDao,
+    deleteOrderDao,
   } = OrdersRepository(fastify.db);
 
   const createOrder = async (orders) => {
@@ -16,6 +17,11 @@ const ordersService = (fastify) => {
 
   const updateOrder = async (orders) => {
     const ordersId = await updateOrderDao(orders);
+    return ordersId;
+  };
+
+  const deleteOrder = async (orders) => {
+    const ordersId = await deleteOrderDao(orders);
     return ordersId;
   };
 
@@ -56,7 +62,13 @@ const ordersService = (fastify) => {
     }));
   };
 
-  return { createOrder, getOrdersByUserId, getAllOrders, updateOrder };
+  return {
+    createOrder,
+    getOrdersByUserId,
+    getAllOrders,
+    updateOrder,
+    deleteOrder,
+  };
 };
 
 module.exports = ordersService;

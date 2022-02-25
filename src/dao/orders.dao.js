@@ -27,6 +27,20 @@ const dao = (db) => {
     }
   };
 
+  const deleteOrderDao = async (orderId) => {
+    try {
+      const orders = await db.query(
+        `DELETE FROM public.orders
+        WHERE order_id=$1 and order_status ='PLACED' returning *`,
+        [orderId]
+      );
+      return orders;
+    } catch (error) {
+      console.log(error);
+      throw Error('failed to delete order records from db');
+    }
+  };
+
   const getAllOrdersDao = async () => {
     try {
       const orders = await db.query(
@@ -105,6 +119,7 @@ const dao = (db) => {
     getOrdersDao,
     getAllOrdersByUserIdDao,
     getOrdersByUserIdDao,
+    deleteOrderDao,
   };
 };
 

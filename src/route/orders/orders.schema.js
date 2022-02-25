@@ -127,6 +127,16 @@ const queryParameterOrders = {
   },
 };
 
+const deleteOrderReqObj = {
+  type: 'object',
+  required: ['orderId'],
+  properties: {
+    orderId: {
+      type: 'string',
+    },
+  },
+};
+
 module.exports = {
   postRequestBody,
   queryParameter,
