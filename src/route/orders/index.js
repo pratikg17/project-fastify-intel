@@ -20,6 +20,7 @@ const orderRoute = async (fastify) => {
     addNewTrade,
     getAllTrades,
     getTradesByUserId,
+    getInvestorPortfolio,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -58,6 +59,19 @@ const orderRoute = async (fastify) => {
       await fastify.authenticate(request, reply);
       const { user_id } = request.query;
       const trades = await getTradesByUserId(user_id);
+      reply.code(200).send({ trades });
+    }
+  );
+
+  fastify.get(
+    '/get-user-portfolio',
+    {
+      schema: { querystring: queryParameterUserId },
+    },
+    async (request, reply) => {
+      await fastify.authenticate(request, reply);
+      const { user_id } = request.query;
+      const trades = await getInvestorPortfolio(user_id);
       reply.code(200).send({ trades });
     }
   );

@@ -9,8 +9,8 @@ const ordersService = (fastify) => {
     updateOrderDao,
     deleteOrderDao,
     recordNewTrade,
-    getAllTradesDao,
     getAllTradesByUserIdDao,
+    getInvestorPortfolioDao,
   } = OrdersRepository(fastify.db);
 
   const createOrder = async (orders) => {
@@ -95,6 +95,11 @@ const ordersService = (fastify) => {
     };
   };
 
+  const getInvestorPortfolio = async (userId) => {
+    const portfolioData = await getInvestorPortfolioDao(userId);
+    return portfolioData;
+  };
+
   return {
     createOrder,
     getOrdersByUserId,
@@ -104,12 +109,8 @@ const ordersService = (fastify) => {
     addNewTrade,
     getAllTrades,
     getTradesByUserId,
+    getInvestorPortfolio,
   };
 };
 
 module.exports = ordersService;
-
-// select distinct  s.stock_name  , sum(quantity), sum(buy_amount) / count(nullif(buy_amount, 0))  from trades t
-// join stocks s on s.stock_id  = t.stock_id
-// where user_id = '0c489c87-1503-48f9-9dfb-3138d78e49d2'
-// group by  s.stock_name

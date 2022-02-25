@@ -162,6 +162,22 @@ const dao = (db) => {
     }
   };
 
+  const getInvestorPortfolioDao = async (userId) => {
+    try {
+      const portfolioData = await db.query(
+        `select distinct  s.stock_name  , sum(quantity) as "noOfStocks" , sum(buy_amount) / count(nullif(buy_amount, 0)) as  "avgBuyPrice" from trades t
+        join stocks s on s.stock_id  = t.stock_id
+        where user_id = $1
+        group by  s.stock_name`,
+        [userId]
+      );
+      return portfolioData;
+    } catch (error) {
+      console.log(error.message);
+      throw Error('Not valid portfolio data - failed to get data from db');
+    }
+  };
+
   return {
     getAllOrdersDao,
     createNewOrder,
@@ -173,6 +189,7 @@ const dao = (db) => {
     getAllTradeDao,
     deleteOrderDao,
     recordNewTrade,
+    getInvestorPortfolioDao,
   };
 };
 
