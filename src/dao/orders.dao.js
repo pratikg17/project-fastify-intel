@@ -112,6 +112,29 @@ const dao = (db) => {
     }
   };
 
+  const recordNewTrade = async (trade) => {
+    try {
+      const tradeData = await db.one(
+        `INSERT INTO trades
+        (order_id, user_id, stock_id, quantity, amount, "trade_type", trade_date)
+        VALUES($1, $2, $3, $4, $5, $6, $7) returning *`,
+        [
+          trade.orderId,
+          trade.userId,
+          trade.stockId,
+          trade.quantity,
+          trade.amount,
+          trade.tradeType,
+          trade.tradeDate,
+        ]
+      );
+      return tradeData;
+    } catch (error) {
+      console.log(error.message);
+      throw Error('Not valid trade data - failed to save in db');
+    }
+  };
+
   return {
     getAllOrdersDao,
     createNewOrder,
@@ -120,6 +143,7 @@ const dao = (db) => {
     getAllOrdersByUserIdDao,
     getOrdersByUserIdDao,
     deleteOrderDao,
+    recordNewTrade,
   };
 };
 

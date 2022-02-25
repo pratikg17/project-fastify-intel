@@ -137,8 +137,37 @@ const deleteOrderReqObj = {
   },
 };
 
+const addTradeReqObj = {
+  type: 'object',
+  required: ['orderId', 'userId', 'stockId', 'quantity', 'tradeType', 'amount'],
+  properties: {
+    orderId: {
+      type: 'string',
+    },
+    stockId: {
+      type: 'string',
+    },
+    userId: {
+      type: 'string',
+    },
+    quantity: {
+      type: 'number',
+    },
+    amount: {
+      type: 'number',
+    },
+    tradeType: {
+      type: 'string',
+    },
+    tradeDate: {
+      type: 'string',
+    },
+  },
+};
+
 module.exports = {
   postRequestBody,
   queryParameter,
   queryParameterOrders,
+  addTradeReqObj,
 };

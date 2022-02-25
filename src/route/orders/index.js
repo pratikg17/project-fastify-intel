@@ -6,6 +6,7 @@ const {
   queryParameterOrders,
   updateOrderRequestBody,
   deleteOrderReqObj,
+  addTradeReqObj,
 } = require('./Orders.schema');
 
 // mark this function as async - required
@@ -16,6 +17,7 @@ const orderRoute = async (fastify) => {
     getOrdersByUserId,
     updateOrder,
     deleteOrder,
+    addNewTrade,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -94,6 +96,20 @@ const orderRoute = async (fastify) => {
       const orderId = await updateOrder(order);
 
       reply.code(201).send({ orderId });
+    }
+  );
+
+  fastify.post(
+    '/add-trade',
+    {
+      schema: { body: addTradeReqObj },
+    },
+    async (request, reply) => {
+      // authenticate request
+      await fastify.authenticate(request, reply);
+      const trade = request.body;
+      const tradeData = await addNewTrade(trade);
+      reply.code(201).send({ tradeData });
     }
   );
 };

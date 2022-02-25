@@ -8,6 +8,7 @@ const ordersService = (fastify) => {
     getAllOrdersDao,
     updateOrderDao,
     deleteOrderDao,
+    recordNewTrade,
   } = OrdersRepository(fastify.db);
 
   const createOrder = async (orders) => {
@@ -62,12 +63,29 @@ const ordersService = (fastify) => {
     }));
   };
 
+  const addNewTrade = async (trade) => {
+    const tradeData = await recordNewTrade(trade);
+    return {
+      tradeId: tradeData.trade_id,
+      orderId: tradeData.order_id,
+      userId: tradeData.user_id,
+      stockId: tradeData.stock_id,
+      quantity: tradeData.quantity,
+      amount: tradeData.amount,
+      tradeType: tradeData.trade_type,
+      tradeDate: moment(tradeData.trade_date).format('MMMM Do YYYY, h:mm:ss a'),
+      createdAt: moment(tradeData.created_at).format('DD/MM/YYYY'),
+      updatedAt: moment(tradeData.updated_at).format('DD/MM/YYYY'),
+    };
+  };
+
   return {
     createOrder,
     getOrdersByUserId,
     getAllOrders,
     updateOrder,
     deleteOrder,
+    addNewTrade,
   };
 };
 

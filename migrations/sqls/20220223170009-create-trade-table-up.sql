@@ -7,7 +7,6 @@ CREATE TABLE trades (
  quantity BIGINT NOT NULL,
  amount REAL NOT NULL,
  trade_type TRADE_TYPE NOT NULL,
- order_status ORDER_STATUS_TYPE NOT NULL,
  trade_date timestamptz,
  created_at timestamptz NOT NULL DEFAULT now(),
  updated_at timestamptz NOT NULL DEFAULT now(),
