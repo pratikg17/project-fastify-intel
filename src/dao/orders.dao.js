@@ -56,7 +56,7 @@ const dao = (db) => {
   const getAllPlacedOrdersDao = async () => {
     try {
       const orders = await db.query(
-        `select * from orders o where order_status = 'PLACED'`
+        `select * from orders o where order_status IN ('PLACED', 'PARTIALLY_EXECUTED')`
       );
 
       return orders;
