@@ -21,6 +21,7 @@ const orderRoute = async (fastify) => {
     getAllTrades,
     getTradesByUserId,
     getInvestorPortfolio,
+    fluctuateStockPrice,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -152,9 +153,8 @@ const orderRoute = async (fastify) => {
   fastify.post('/fluctuate-market', async (request, reply) => {
     // authenticate request
     await fastify.authenticate(request, reply);
-    const trade = request.body;
-    const tradeData = await addNewTrade(trade);
-    reply.code(201).send({ tradeData });
+    const data = await fluctuateStockPrice();
+    reply.code(201).send({ data });
   });
 };
 

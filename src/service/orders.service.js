@@ -1,5 +1,7 @@
 const moment = require('moment');
 const OrdersRepository = require('../dao/orders.dao');
+const StockRepository = require('../dao/stocks.dao');
+const fakeStocks = require('../plugin/helper/fakerStockPrices');
 
 const ordersService = (fastify) => {
   const {
@@ -12,6 +14,8 @@ const ordersService = (fastify) => {
     getAllTradesByUserIdDao,
     getInvestorPortfolioDao,
   } = OrdersRepository(fastify.db);
+
+  const { getAllStocksDao } = StockRepository(fastify.db);
 
   const createOrder = async (orders) => {
     const orderId = await createNewOrder(orders);
@@ -102,7 +106,11 @@ const ordersService = (fastify) => {
 
   const fluctuateStockPrice = async () => {
     console.log('Called fluctuateStockPrice');
-    return null;
+    const allStocks = await getAllStocksDao();
+
+    fakeStocks(allStocks);
+
+    return allStocks;
   };
 
   return {
