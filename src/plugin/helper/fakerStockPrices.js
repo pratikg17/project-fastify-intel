@@ -19,9 +19,6 @@ const changeValueByPercent = (currentValue, percentChange) => {
 };
 
 const fakeStocks = (stocks) => {
-  const change = percentChange();
-  console.log('change', change + ' %');
-  console.log(stocks);
   const newStockPrice = stocks.map((stock) => {
     const change = percentChange();
     let newCurrentPrice = changeValueByPercent(stock.current_price, change);
@@ -38,15 +35,16 @@ const fakeStocks = (stocks) => {
       dailyHigh = newCurrentPrice;
     }
 
-    console.log('Stock', stock.stock_name);
-    console.log('Current Price', stock.current_price);
-    console.log('New Price', newCurrentPrice);
-    console.log('New dailyLow', dailyLow);
-    console.log('New dailyHigh', dailyHigh);
-
-    console.log('Vol', stock.current_price);
-    console.log('New Vol', newVolume);
+    return {
+      ...stock,
+      newCurrentPrice,
+      newVolume,
+      dailyHigh,
+      dailyLow,
+    };
   });
+
+  return newStockPrice;
 };
 
 module.exports = fakeStocks;

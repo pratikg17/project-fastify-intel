@@ -115,8 +115,8 @@ const ordersService = (fastify) => {
 
     const currentTime = moment().format('hh:mm A');
     let timestamp = moment();
-    const currentMarketTime = moment(timestamp, 'HH:mm:ss').format('hh:mm A');
 
+    const currentMarketTime = moment(timestamp, 'HH:mm:ss').format('hh:mm A');
     let isMarketStartTime = currentMarketTime == startTime;
     let isMarketEndTime = currentMarketTime == endTime;
 
@@ -127,11 +127,16 @@ const ordersService = (fastify) => {
     console.log('isMarketEndTime', isMarketEndTime);
     console.log('currentTime', currentTime);
 
-    const isWeekday = timestamp.day() % 6 == 0;
+    const isWeekEnd = !(timestamp.day() % 6 == 0);
+    console.log('tim', timestamp);
+    console.log(' timestamp.day()', timestamp.day() % 6);
 
-    if (isWeekday) {
-      // const allStocks = await getAllStocksDao();
-      // fakeStocks(allStocks);
+    console.log('isWeekEnd', isWeekEnd);
+    if (isWeekEnd) {
+      const allStocks = await getAllStocksDao();
+      const newStockPrices = fakeStocks(allStocks);
+
+      // return newStockPrices;
     }
 
     // console.log('timestamp', timestamp.isoWeekday());
