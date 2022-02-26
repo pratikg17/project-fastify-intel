@@ -14,6 +14,7 @@ const ordersService = (fastify) => {
     getAllTradesByUserIdDao,
     getInvestorPortfolioDao,
     getMarketHoursDao,
+    getAllPlacedOrdersDao,
   } = OrdersRepository(fastify.db);
 
   const { getAllStocksDao, updateStockPricesDao, recordStockPriceDao } =
@@ -152,12 +153,9 @@ const ordersService = (fastify) => {
         };
       });
 
-      const updatedStockPrices = await updateStockPricesDao(
-        formatStockUpdateData
-      );
+      await updateStockPricesDao(formatStockUpdateData);
 
       // Record Stock Prices
-
       await recordStockPriceDao(
         newStockPrices,
         isMarketStartTime,
@@ -165,12 +163,32 @@ const ordersService = (fastify) => {
         timestamp
       );
 
-      // Add Price record
-
-      return updatedStockPrices;
+      executeOrders();
+      return true;
     }
 
-    return null;
+    return false;
+  };
+
+  const executeOrders = async () => {
+    const allStocks = await getAllStocksDao();
+    const allPlacedOrders = await getAllPlacedOrdersDao();
+    const buyOrder = allPlacedOrders.filter(
+      (order) => order.trade_type == 'BUY' && order.order_type == 'MARKET'
+    );
+    const sellOrder = allPlacedOrders.filter(
+      (order) => order.trade_type == 'SELL' && order.order_type == 'MARKET'
+    );
+
+    console.log('BUY ORDER', buyOrder);
+    console.log('sellOrder', sellOrder);
+    // BUY MARKET = Search stock_id in sell order
+    // 1. See if the quantity matches if matches
+    // 2. Add both the orders in executionArray
+    // 3. Check whether buyer has enough funds (based on funds )
+    // 4. Add deduct the amount for buyer
+    // 5. Credit amount for seller
+    // 6. Add the trades for Buyer and seller
   };
 
   return {
@@ -184,6 +202,7 @@ const ordersService = (fastify) => {
     getTradesByUserId,
     getInvestorPortfolio,
     fluctuateStockPrice,
+    executeOrders,
   };
 };
 

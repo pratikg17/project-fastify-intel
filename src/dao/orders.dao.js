@@ -53,6 +53,18 @@ const dao = (db) => {
     }
   };
 
+  const getAllPlacedOrdersDao = async () => {
+    try {
+      const orders = await db.query(
+        `select * from orders o where order_status = 'PLACED'`
+      );
+
+      return orders;
+    } catch (error) {
+      throw Error('failed to fetch orders records from db');
+    }
+  };
+
   const getAllTradeDao = async () => {
     try {
       const trades = await db.query(
@@ -201,6 +213,7 @@ const dao = (db) => {
     recordNewTrade,
     getInvestorPortfolioDao,
     getMarketHoursDao,
+    getAllPlacedOrdersDao,
   };
 };
 

@@ -5,6 +5,7 @@ const recordStockPriceHelper = (
   timestamp
 ) => {
   let isSaveRecords = timestamp.minute() % 5 == 0 ? true : false;
+  // let isSaveRecords = true;
 
   let recordType = 'FIVE_MINUTE';
 
@@ -30,7 +31,7 @@ const recordStockPriceHelper = (
     const query = `INSERT INTO public.stock_price_records
       (stock_id, price, volume, record_type, record_time, record_date)
       VALUES  ${queryString} `;
-
+    console.log(query);
     return query;
   } else {
     return null;
