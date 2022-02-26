@@ -4,20 +4,21 @@ const recordStockPriceHelper = (
   isMarketEndTime,
   timestamp
 ) => {
+  let isSaveRecords = timestamp.minute() % 5 == 0 ? true : false;
+
   let recordType = 'FIVE_MINUTE';
 
   if (isMarketStartTime) {
     recordType = 'OPEN';
+    isSaveRecords = true;
   }
 
   if (isMarketEndTime) {
     recordType = 'CLOSE';
+    isSaveRecords = true;
   }
 
-  console.log('MINUTE', timestamp.minute());
-
-  const isSaveRecords = timestamp.minute() % 5 == 0 ? true : false;
-  // const isSaveRecords = true;
+  console.log(recordType);
 
   if (isSaveRecords) {
     const queryString = stocks.map((stock) => {

@@ -109,33 +109,32 @@ const ordersService = (fastify) => {
   const fluctuateStockPrice = async () => {
     console.log('Called fluctuateStockPrice');
     const marketHours = await getMarketHoursDao();
-    const startTime = moment(marketHours.start_time, 'HH:mm:ss').format(
-      'hh:mm A'
-    );
-    const endTime = moment(marketHours.end_time, 'HH:mm:ss').format('hh:mm A');
 
-    const currentTime = moment().format('hh:mm A');
+    const startTime = moment(marketHours.start_time, 'HH:mm:ss');
+    const endTime = moment(marketHours.end_time, 'HH:mm:ss');
     let timestamp = moment();
 
-    const currentMarketTime = moment(timestamp, 'HH:mm:ss').format('hh:mm A');
-    let isMarketStartTime = currentMarketTime == startTime;
-    let isMarketEndTime = currentMarketTime == endTime;
+    const currentMarketTime = moment(timestamp, 'HH:mm:ss');
+    let isMarketStartTime =
+      currentMarketTime.format('hh:mm A') == startTime.format('hh:mm A');
+    let isMarketEndTime =
+      currentMarketTime.format('hh:mm A') == endTime.format('hh:mm A');
 
     console.log('startTime', startTime);
     console.log('endTime', endTime);
     console.log('currentMarketTime', currentMarketTime);
     console.log('isMarketStartTime', isMarketStartTime);
     console.log('isMarketEndTime', isMarketEndTime);
-    console.log('currentTime', currentTime);
 
     // TODO Change this
     const isWeekEnd = timestamp.day() % 6 == 0;
-    console.log('tim', timestamp);
-    console.log(' timestamp.day()', timestamp.day() % 6);
-    console.log(timestamp.isBetween(startTime, endTime));
+
     console.log('isWeekEnd', isWeekEnd);
+
+    console.log('TIME IS BEWTEEN', timestamp.isBetween(startTime, endTime));
+
     // If a weekday and between the
-    if (isWeekEnd) {
+    if (isWeekEnd && timestamp.isBetween(startTime, endTime)) {
       const allStocks = await getAllStocksDao();
       const newStockPrices = fakeStocks(allStocks);
 
