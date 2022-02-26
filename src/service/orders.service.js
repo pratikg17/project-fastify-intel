@@ -13,6 +13,7 @@ const ordersService = (fastify) => {
     recordNewTrade,
     getAllTradesByUserIdDao,
     getInvestorPortfolioDao,
+    getMarketHoursDao,
   } = OrdersRepository(fastify.db);
 
   const { getAllStocksDao } = StockRepository(fastify.db);
@@ -106,11 +107,37 @@ const ordersService = (fastify) => {
 
   const fluctuateStockPrice = async () => {
     console.log('Called fluctuateStockPrice');
-    const allStocks = await getAllStocksDao();
+    const marketHours = await getMarketHoursDao();
+    const startTime = moment(marketHours.start_time, 'HH:mm:ss').format(
+      'hh:mm A'
+    );
+    const endTime = moment(marketHours.end_time, 'HH:mm:ss').format('hh:mm A');
 
-    fakeStocks(allStocks);
+    const currentTime = moment().format('hh:mm A');
+    let timestamp = moment();
+    const currentMarketTime = moment(timestamp, 'HH:mm:ss').format('hh:mm A');
 
-    return allStocks;
+    let isMarketStartTime = currentMarketTime == startTime;
+    let isMarketEndTime = currentMarketTime == endTime;
+
+    console.log('startTime', startTime);
+    console.log('endTime', endTime);
+    console.log('currentMarketTime', currentMarketTime);
+    console.log('isMarketStartTime', isMarketStartTime);
+    console.log('isMarketEndTime', isMarketEndTime);
+    console.log('currentTime', currentTime);
+
+    const isWeekday = timestamp.day() % 6 == 0;
+
+    if (isWeekday) {
+      // const allStocks = await getAllStocksDao();
+      // fakeStocks(allStocks);
+    }
+
+    // console.log('timestamp', timestamp.isoWeekday());
+
+    // return allStocks;
+    return null;
   };
 
   return {

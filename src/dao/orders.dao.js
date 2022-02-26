@@ -178,6 +178,16 @@ const dao = (db) => {
     }
   };
 
+  const getMarketHoursDao = async () => {
+    try {
+      const hours = await db.one(`select * from market_hours;`);
+      return hours;
+    } catch (error) {
+      console.log(error.message);
+      throw Error('Not valid hour data - failed to get data from db');
+    }
+  };
+
   return {
     getAllOrdersDao,
     createNewOrder,
@@ -190,6 +200,7 @@ const dao = (db) => {
     deleteOrderDao,
     recordNewTrade,
     getInvestorPortfolioDao,
+    getMarketHoursDao,
   };
 };
 
