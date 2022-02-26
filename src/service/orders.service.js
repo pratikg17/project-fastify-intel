@@ -16,7 +16,7 @@ const ordersService = (fastify) => {
     getMarketHoursDao,
   } = OrdersRepository(fastify.db);
 
-  const { getAllStocksDao } = StockRepository(fastify.db);
+  const { getAllStocksDao, updateStockPricesDao } = StockRepository(fastify.db);
 
   const createOrder = async (orders) => {
     const orderId = await createNewOrder(orders);
@@ -127,7 +127,7 @@ const ordersService = (fastify) => {
     console.log('isMarketEndTime', isMarketEndTime);
     console.log('currentTime', currentTime);
 
-    const isWeekEnd = !(timestamp.day() % 6 == 0);
+    const isWeekEnd = timestamp.day() % 6 == 0;
     console.log('tim', timestamp);
     console.log(' timestamp.day()', timestamp.day() % 6);
 
@@ -136,7 +136,24 @@ const ordersService = (fastify) => {
       const allStocks = await getAllStocksDao();
       const newStockPrices = fakeStocks(allStocks);
 
-      // return newStockPrices;
+      // Update Stock prices
+      const formatStockUpdateData = newStockPrices.map((stock) => {
+        return {
+          stockId: stock.stock_id,
+          currentPrice: stock.newCurrentPrice,
+          volume: stock.newVolume,
+          dailyHigh: stock.dailyHigh,
+          dailyLow: stock.dailyLow,
+        };
+      });
+
+      const updatedStockPrices = await updateStockPricesDao(
+        formatStockUpdateData
+      );
+
+      // Add Price record
+
+      return updatedStockPrices;
     }
 
     // console.log('timestamp', timestamp.isoWeekday());

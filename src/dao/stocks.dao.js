@@ -67,11 +67,39 @@ const dao = (db) => {
     }
   };
 
+  const updateStockPricesDao = async (stockPrices) => {
+    try {
+      //  Yearly High / Low , Daily High / Low and current price will be the same
+
+      const updateValues = stockPrices.map((stock) => {
+        let values = `('${stock.stockId}'::uuid, ${stock.currentPrice}, ${stock.volume}, ${stock.dailyHigh}, ${stock.dailyLow})`;
+        return values;
+      });
+      const query = `update stocks
+      set
+        current_price = tmp.current_price,
+        volume = tmp.volume ,
+        daily_high = tmp.daily_high ,
+        daily_low = tmp.daily_low
+      from ( values  ${updateValues.join(',')}) 
+      as tmp (stock_id , current_price, volume, daily_high, daily_low)
+      where
+        stocks.stock_id = tmp.stock_id ;`;
+
+      const stockUpdated = await db.query(query);
+      return stockUpdated;
+    } catch (error) {
+      console.log(error);
+      throw Error('Not valid stock data - failed to update in db');
+    }
+  };
+
   return {
     getAllStocksDao,
     createNewStock,
     updateStockDao,
     getStocksDao,
+    updateStockPricesDao,
   };
 };
 

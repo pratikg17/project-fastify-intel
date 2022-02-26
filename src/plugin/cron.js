@@ -28,7 +28,9 @@ module.exports = fp(async (fastify, options, next) => {
           // 2.Check if its holiday or not
           // 3.Get the stocks
           // 4.Create a function which will modify the price and volume
+
           // 5.update all the stock prices
+
           // 6.If it is the 5th minute store the data in record table
           // 7.Execute the buy / sell orders
           // 8.Get the user details and wallet

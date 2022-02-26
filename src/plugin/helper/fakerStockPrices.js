@@ -9,7 +9,7 @@ const percentChange = () => {
   let changePercent =
     Math.random() * (MAX_PERCENT_CHANGE - MIN_PERCENT_CHANGE) +
     MIN_PERCENT_CHANGE;
-  return Math.round(Math.floor(plusOrMinus * changePercent));
+  return Math.round(Math.floor(plusOrMinus * changePercent)).toFixed(2);
 };
 
 const changeValueByPercent = (currentValue, percentChange) => {
