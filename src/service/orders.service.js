@@ -131,10 +131,13 @@ const ordersService = (fastify) => {
 
     console.log('isWeekEnd', isWeekEnd);
 
-    console.log('TIME IS BEWTEEN', timestamp.isBetween(startTime, endTime));
+    console.log(
+      'TIME IS BEWTEEN',
+      timestamp.isBetween(startTime, endTime.add(1, 'm'))
+    );
 
     // If a weekday and between the
-    if (isWeekEnd && timestamp.isBetween(startTime, endTime)) {
+    if (isWeekEnd && timestamp.isBetween(startTime, endTime.add(1, 'm'))) {
       const allStocks = await getAllStocksDao();
       const newStockPrices = fakeStocks(allStocks);
 
