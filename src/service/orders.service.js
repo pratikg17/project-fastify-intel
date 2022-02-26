@@ -16,7 +16,8 @@ const ordersService = (fastify) => {
     getMarketHoursDao,
   } = OrdersRepository(fastify.db);
 
-  const { getAllStocksDao, updateStockPricesDao } = StockRepository(fastify.db);
+  const { getAllStocksDao, updateStockPricesDao, recordStockPriceDao } =
+    StockRepository(fastify.db);
 
   const createOrder = async (orders) => {
     const orderId = await createNewOrder(orders);
@@ -127,11 +128,13 @@ const ordersService = (fastify) => {
     console.log('isMarketEndTime', isMarketEndTime);
     console.log('currentTime', currentTime);
 
+    // TODO Change this
     const isWeekEnd = timestamp.day() % 6 == 0;
     console.log('tim', timestamp);
     console.log(' timestamp.day()', timestamp.day() % 6);
-
+    console.log(timestamp.isBetween(startTime, endTime));
     console.log('isWeekEnd', isWeekEnd);
+    // If a weekday and between the
     if (isWeekEnd) {
       const allStocks = await getAllStocksDao();
       const newStockPrices = fakeStocks(allStocks);
@@ -151,14 +154,20 @@ const ordersService = (fastify) => {
         formatStockUpdateData
       );
 
+      // Record Stock Prices
+
+      await recordStockPriceDao(
+        newStockPrices,
+        isMarketStartTime,
+        isMarketEndTime,
+        timestamp
+      );
+
       // Add Price record
 
       return updatedStockPrices;
     }
 
-    // console.log('timestamp', timestamp.isoWeekday());
-
-    // return allStocks;
     return null;
   };
 

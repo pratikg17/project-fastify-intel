@@ -4,7 +4,7 @@ CREATE TABLE stock_price_records (
  stock_id UUID NOT NULL, 
  price REAL NOT NULL,
  volume REAL NOT NULL,
- record_type TRADE_TYPE NOT NULL,
+ record_type RECORD_PRICE_TYPE NOT NULL,
  record_time timestamptz,
  record_date DATE NOT NULL DEFAULT now(),
  created_at timestamptz NOT NULL DEFAULT now(),

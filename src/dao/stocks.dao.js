@@ -1,3 +1,5 @@
+const recordStockPriceHelper = require('../plugin/helper/recordStockPrices');
+
 const dao = (db) => {
   const getStocksDao = async (limit, offset) => {
     try {
@@ -94,12 +96,37 @@ const dao = (db) => {
     }
   };
 
+  const recordStockPriceDao = async (
+    stockPrices,
+    isMarketStartTime,
+    isMarketEndTime,
+    timestamp
+  ) => {
+    try {
+      let query = recordStockPriceHelper(
+        stockPrices,
+        isMarketStartTime,
+        isMarketEndTime,
+        timestamp
+      );
+      if (query) {
+        const stocks = await db.query(query);
+
+        return stocks;
+      }
+    } catch (error) {
+      console.log(error);
+      throw Error('failed to store stocks price records in db');
+    }
+  };
+
   return {
     getAllStocksDao,
     createNewStock,
     updateStockDao,
     getStocksDao,
     updateStockPricesDao,
+    recordStockPriceDao,
   };
 };
 
