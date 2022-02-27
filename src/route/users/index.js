@@ -57,7 +57,7 @@ const userRoute = async (fastify) => {
       const { userName, password } = request.body;
 
       const user = await getInvestorAuthetication(userName, password);
-
+      console.log('useruseruser', user);
       // create jwt token
       const token = fastify.jwt.sign(user);
 

@@ -24,9 +24,9 @@ const userService = (fastify) => {
     if (user.password !== password) {
       throw Error('Password is not valid!');
     }
-
+    console.log('getUserByEmailIdgetUserByEmailIdgetUserByEmailId', user);
     return {
-      id: user.id,
+      userId: user.user_id,
       username: user.username,
       firstName: user.first_name,
       lastName: user.last_name,
@@ -44,13 +44,14 @@ const userService = (fastify) => {
     }
 
     return {
-      id: user.id,
+      userId: user.user_id,
       username: user.username,
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
       createdAt: moment(user.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+      isAdmin: true,
     };
   };
 
@@ -64,8 +65,8 @@ const userService = (fastify) => {
     }
 
     return {
-      id: user.id,
-      username: user.username,
+      userId: user.user_id,
+      userName: user.username,
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
