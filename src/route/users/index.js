@@ -19,6 +19,7 @@ const userRoute = async (fastify) => {
     debitInvestorFunds,
     getInvestorFundBalance,
     getAllInvestorWalletHistory,
+    withdrawInvestorFunds,
   } = UserService(fastify);
 
   fastify.get(
@@ -92,6 +93,19 @@ const userRoute = async (fastify) => {
     const funds = request.body;
     const transaction = await creditInvestorFunds(funds);
     reply.code(201).send({ transaction });
+  });
+
+  fastify.post('/withdraw-investor-funds', async (request, reply) => {
+    // authenticate request
+    await fastify.authenticate(request, reply);
+    const funds = request.body;
+    const transaction = await withdrawInvestorFunds(funds);
+    if (transaction) {
+      reply.code(201).send({ transaction });
+    } else {
+      throw new Error('Insufficient funds for withdrawal');
+      // reply.code(500).send({ error });
+    }
   });
 
   fastify.post('/debit-investor-funds', async (request, reply) => {

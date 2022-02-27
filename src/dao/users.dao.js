@@ -95,7 +95,7 @@ const userRepository = (db) => {
       (debit_amount, credit_amount, description, user_id, "transaction_type", trasactiondate)
       VALUES($1, 0,  $2, $3, 'DEBIT', now())  returning *;
       `,
-        [funds.amount, 'Debited funds from wallet', funds.userId]
+        [funds.amount, 'Withdrawal Request Processed', funds.userId]
       );
       return trasaction;
     } catch {

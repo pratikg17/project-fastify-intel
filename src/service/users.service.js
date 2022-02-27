@@ -86,6 +86,18 @@ const userService = (fastify) => {
     return transaction;
   };
 
+  const withdrawInvestorFunds = async (funds) => {
+    const balance = await userRepository.getInvestorFundBalanceDao(
+      funds.userId
+    );
+    if (balance >= funds.amount) {
+      const transaction = await userRepository.debitInvestorFundsDao(funds);
+      return transaction;
+    } else {
+      return null;
+    }
+  };
+
   const debitInvestorFunds = async (funds) => {
     const transaction = await userRepository.debitInvestorFundsDao(funds);
     return transaction;
@@ -123,6 +135,7 @@ const userService = (fastify) => {
     getInvestorFundBalance,
     getAllInvestorWalletHistory,
     getInvestorWalletHistory,
+    withdrawInvestorFunds,
   };
 };
 
