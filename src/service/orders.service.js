@@ -597,7 +597,7 @@ const ordersService = (fastify) => {
     }
 
     const allProcessedOrders = [...buyOrders, ...sellOrders];
-    await updateProcessedOrdersDao(allProcessedOrders);
+    // await updateProcessedOrdersDao(allProcessedOrders);
     return {
       trades,
       allProcessedOrders,

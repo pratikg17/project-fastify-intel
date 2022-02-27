@@ -161,9 +161,11 @@ const userRepository = (db) => {
     }
   };
 
-  const getAllInvestorWalletHistoryDao = async () => {
+  const getAllInvestorWalletHistoryDao = async (userId) => {
     try {
-      const wallet = await db.query(`select * from investor_funds`);
+      const wallet = await db.query(
+        `select * from investor_funds where user_id='${userId}' order by created_at DESC`
+      );
       return wallet;
     } catch (error) {
       throw Error('failed to fetch investor_funds records from db');
