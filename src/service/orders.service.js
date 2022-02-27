@@ -264,14 +264,14 @@ const ordersService = (fastify) => {
                     debitAmount: buyerDebitAmount,
                     creditAmount: 0,
                     userId: buyOrders[i].user_id,
-                    description: `Bought ${sellOrderFulFilled} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                    description: `Bought ${sellOrderFulFilled} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                   };
 
                   let sellerCredit = {
                     debitAmount: 0,
                     creditAmount: buyerDebitAmount,
                     userId: sellOrders[j].user_id,
-                    description: `Sold ${sellOrderFulFilled} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                    description: `Sold ${sellOrderFulFilled} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                   };
 
                   trades.push(buyTrade);
@@ -323,14 +323,14 @@ const ordersService = (fastify) => {
                     debitAmount: buyerDebitAmount,
                     creditAmount: 0,
                     userId: buyOrders[i].user_id,
-                    description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                    description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                   };
 
                   let sellerCredit = {
                     debitAmount: 0,
                     creditAmount: buyerDebitAmount,
                     userId: sellOrders[j].user_id,
-                    description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                    description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                   };
 
                   trades.push(buyTrade);
@@ -381,14 +381,14 @@ const ordersService = (fastify) => {
                     debitAmount: buyerDebitAmount,
                     creditAmount: 0,
                     userId: buyOrders[i].user_id,
-                    description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                    description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                   };
 
                   let sellerCredit = {
                     debitAmount: 0,
                     creditAmount: buyerDebitAmount,
                     userId: sellOrders[j].user_id,
-                    description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                    description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                   };
 
                   trades.push(buyTrade);
@@ -452,14 +452,14 @@ const ordersService = (fastify) => {
                       debitAmount: buyerDebitAmount,
                       creditAmount: 0,
                       userId: buyOrders[i].user_id,
-                      description: `Bought ${sellOrderFulFilled} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                      description: `Bought ${sellOrderFulFilled} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                     };
 
                     let sellerCredit = {
                       debitAmount: 0,
                       creditAmount: buyerDebitAmount,
                       userId: sellOrders[j].user_id,
-                      description: `Sold ${sellOrderFulFilled} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                      description: `Sold ${sellOrderFulFilled} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                     };
 
                     trades.push(buyTrade);
@@ -511,14 +511,14 @@ const ordersService = (fastify) => {
                       debitAmount: buyerDebitAmount,
                       creditAmount: 0,
                       userId: buyOrders[i].user_id,
-                      description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                      description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                     };
 
                     let sellerCredit = {
                       debitAmount: 0,
                       creditAmount: buyerDebitAmount,
                       userId: sellOrders[j].user_id,
-                      description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                      description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                     };
 
                     trades.push(buyTrade);
@@ -569,14 +569,14 @@ const ordersService = (fastify) => {
                       debitAmount: buyerDebitAmount,
                       creditAmount: 0,
                       userId: buyOrders[i].user_id,
-                      description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of ${tradingStock.stock_name} for ${stockPrice}`,
+                      description: `Bought ${buyOrders[i].fulfilled_quantity} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
                     };
 
                     let sellerCredit = {
                       debitAmount: 0,
                       creditAmount: buyerDebitAmount,
                       userId: sellOrders[j].user_id,
-                      description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of ${tradingStock.stock_name} at ${stockPrice}`,
+                      description: `Sold ${sellOrders[j].fulfilled_quantity} stocks of  $${tradingStock.stock_name} at ${stockPrice}`,
                     };
 
                     trades.push(buyTrade);
