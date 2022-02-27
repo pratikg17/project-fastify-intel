@@ -45,7 +45,7 @@ const userService = (fastify) => {
 
     return {
       userId: user.user_id,
-      username: user.username,
+      userName: user.username,
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,

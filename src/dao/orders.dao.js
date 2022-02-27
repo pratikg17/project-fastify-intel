@@ -17,10 +17,9 @@ const dao = (db) => {
     try {
       const orders = await db.query(
         `select * from orders o
-        inner join stocks s on s.stock_id  = o.stock_id  where user_id = $1 order by o.created_at`,
+        inner join stocks s on s.stock_id = o.stock_id  where user_id = $1 order by o.updated_at`,
         [userId]
       );
-
       return orders;
     } catch (error) {
       throw Error('failed to fetch orders records from db');

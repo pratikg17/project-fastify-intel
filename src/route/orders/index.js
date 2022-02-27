@@ -40,6 +40,7 @@ const orderRoute = async (fastify) => {
       await fastify.authenticate(request, reply);
       const { user_id } = request.query;
       const orders = await getOrdersByUserId(user_id);
+
       reply.code(200).send({ orders });
     }
   );

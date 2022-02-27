@@ -73,7 +73,7 @@ const ordersService = (fastify) => {
       expiryDate: data.expiry_date,
       orderType: data.order_type,
       orderStatus: data.order_status,
-      tradeType: data.tradeType,
+      tradeType: data.trade_type,
       tickerName: data.ticker_name,
       volume: data.volume,
       dailyHigh: data.daily_high,
@@ -87,7 +87,7 @@ const ordersService = (fastify) => {
       tradeId: data.trade_id,
       buyAmount: data.buy_amount,
       sellAmount: data.sell_amount,
-      tradeDate: moment(data.trade_date).format('MMMM Do YYYY, h:mm:ss a'),
+      // tradeDate: moment(data.trade_date).format('MMM Do YYYY, h:mm:ss a'),
       createdAt: moment(data.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(data.updated_at).format('DD/MM/YYYY'),
     }));
