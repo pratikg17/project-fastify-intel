@@ -161,8 +161,8 @@ const dao = (db) => {
           trade.userId,
           trade.stockId,
           trade.quantity,
-          trade.buy_amount,
-          trade.sell_amount,
+          trade.buyAmount,
+          trade.sellAmount,
           trade.tradeType,
           trade.tradeDate,
         ]

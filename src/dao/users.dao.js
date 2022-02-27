@@ -103,6 +103,37 @@ const userRepository = (db) => {
     }
   };
 
+  const creditInvestorFundsForTradeDao = async (funds) => {
+    try {
+      const trasaction = await db.one(
+        `INSERT INTO investor_funds
+      (debit_amount, credit_amount, description, user_id, "transaction_type", trasactiondate)
+      VALUES(0, $1, $2, $3, 'CREDIT', now()) returning *;
+      `,
+        [funds.creditAmount, funds.description, funds.userId]
+      );
+      return trasaction;
+    } catch (err) {
+      console.log(err);
+      throw Error(`${funds.userId} Credit  does not exist`);
+    }
+  };
+
+  const debitInvestorFundsForTradeDao = async (funds) => {
+    try {
+      const trasaction = await db.one(
+        `INSERT INTO investor_funds
+      (debit_amount, credit_amount, description, user_id, "transaction_type", trasactiondate)
+      VALUES($1, 0,  $2, $3, 'DEBIT', now())  returning *;
+      `,
+        [funds.debitAmount, funds.description, funds.userId]
+      );
+      return trasaction;
+    } catch {
+      throw Error(`${funds.userId} Debit does not exist`);
+    }
+  };
+
   const getInvestorFundBalanceDao = async (userId) => {
     try {
       const { balance } = await db.one(
@@ -150,6 +181,8 @@ const userRepository = (db) => {
     getInvestorFundBalanceDao,
     getAllInvestorWalletHistoryDao,
     getInvestorWalletHistoryDao,
+    debitInvestorFundsForTradeDao,
+    creditInvestorFundsForTradeDao,
   };
 };
 
