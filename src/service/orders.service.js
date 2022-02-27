@@ -16,6 +16,7 @@ const ordersService = (fastify) => {
     getInvestorPortfolioDao,
     getMarketHoursDao,
     getAllPlacedOrdersDao,
+    updateProcessedOrdersDao,
   } = OrdersRepository(fastify.db);
 
   const { getAllStocksDao, updateStockPricesDao, recordStockPriceDao } =
@@ -405,6 +406,9 @@ const ordersService = (fastify) => {
                 buyOrders[i].order_type == 'MARKET' &&
                 sellOrders[j].order_type == 'MARKET'
               ) {
+                let tradingStock = stockPriceMap[buyOrders[i].stock_id];
+                let stockPrice = parseFloat(tradingStock.current_price);
+
                 if (buyOrderFulFilled == sellOrderFulFilled) {
                   // All Market Order
                   // Buy and Sell order complete
@@ -413,8 +417,9 @@ const ordersService = (fastify) => {
                   let buyerWallet = await getInvestorFundBalanceDao(
                     buyOrders[i].user_id
                   );
-
+                  console.log('buyerWallet', buyerWallet);
                   let buyerDebitAmount = stockPrice * sellOrderFulFilled;
+                  console.log('buyerDebitAmount', buyerDebitAmount);
                   if (buyerWallet >= stockPrice * sellOrderFulFilled) {
                     buyOrders[i].fulfilled_quantity += sellOrderFulFilled;
                     sellOrders[j].fulfilled_quantity += buyOrderFulFilled;
@@ -591,8 +596,11 @@ const ordersService = (fastify) => {
       }
     }
 
+    const allProcessedOrders = [...buyOrders, ...sellOrders];
+    await updateProcessedOrdersDao(allProcessedOrders);
     return {
       trades,
+      allProcessedOrders,
       buyOrders,
       sellOrders,
     };
