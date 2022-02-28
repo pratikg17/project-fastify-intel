@@ -176,10 +176,10 @@ const dao = (db) => {
   const getInvestorPortfolioDao = async (userId) => {
     try {
       const portfolioData = await db.query(
-        `select distinct  s.stock_name  , sum(quantity) as "noOfStocks" , sum(buy_amount) / count(nullif(buy_amount, 0)) as  "avgBuyPrice" from trades t
+        `select distinct  s.stock_id  , sum(quantity) as "noOfStocks" , sum(buy_amount) / count(nullif(buy_amount, 0)) as  "avgBuyPrice" from trades t
         join stocks s on s.stock_id  = t.stock_id
         where user_id = $1
-        group by  s.stock_name`,
+        group by  s.stock_id`,
         [userId]
       );
       return portfolioData;

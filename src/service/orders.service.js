@@ -111,7 +111,27 @@ const ordersService = (fastify) => {
 
   const getInvestorPortfolio = async (userId) => {
     const portfolioData = await getInvestorPortfolioDao(userId);
-    return portfolioData;
+    const allStocks = await getAllStocksDao();
+
+    const data = portfolioData.map((pd) => {
+      const stock = allStocks.find((stock) => {
+        return pd.stock_id == stock.stock_id;
+      });
+
+      return {
+        ...pd,
+        tickerName: stock.ticker_name,
+        volume: stock.volume,
+        dailyHigh: stock.daily_high,
+        dailyLow: stock.daily_low,
+        currentPrice: stock.current_price,
+        initialPrice: stock.initial_price,
+        stockId: stock.stock_id,
+        stockName: stock.stock_name,
+      };
+    });
+
+    return data;
   };
 
   const fluctuateStockPrice = async () => {
