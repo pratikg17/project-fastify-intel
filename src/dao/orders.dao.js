@@ -180,7 +180,9 @@ const dao = (db) => {
         `select distinct  s.stock_id  , sum(quantity) as "noOfStocks" , sum(buy_amount) / count(nullif(buy_amount, 0)) as  "avgBuyPrice" from trades t
         join stocks s on s.stock_id  = t.stock_id
         where user_id = $1
-        group by  s.stock_id`,
+        group by  s.stock_id
+        having sum(quantity) > 0
+        `,
         [userId]
       );
       return portfolioData;
@@ -203,11 +205,16 @@ const dao = (db) => {
   const updateProcessedOrdersDao = async (processedOrders) => {
     try {
       //  Yearly High / Low , Daily High / Low and current price will be the same
-
       const updateValues = processedOrders.map((order) => {
         let values = `('${order.order_id}'::uuid, ${order.fulfilled_quantity}, '${order.order_status}'::ORDER_STATUS_TYPE )`;
         return values;
       });
+
+      let values = updateValues.join(',');
+      if (updateValues.length < 1) {
+        values = updateValues[0];
+      }
+
       const query = `update orders
       set
         fulfilled_quantity = tmp.fulfilled_quantity,

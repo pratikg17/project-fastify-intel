@@ -16,7 +16,7 @@ module.exports = fp(async (fastify, options, next) => {
         // as an argument, as opposed to nothing in the node-cron API:
         onTick: async (server) => {
           console.log('Cronjob- start');
-          // await fluctuateStockPrice();
+          await fluctuateStockPrice();
           // console.log(server);
 
           // 1.Check if market is open or not
@@ -25,11 +25,11 @@ module.exports = fp(async (fastify, options, next) => {
           // 4.Create a function which will modify the price and volume
           // 5.update all the stock price
           // 6.If it is the 5th minute store the data in record table
-          const isMarketOpen = await fluctuateStockPrice();
+          // const isMarketOpen = await fluctuateStockPrice();
 
-          if (isMarketOpen) {
-            await executeOrders();
-          }
+          // if (isMarketOpen) {
+          //   executeOrders();
+          // }
 
           // 7. Get the new stock prices and get the orders Execute the buy / sell orders
           // 8.Get the user details and wallet

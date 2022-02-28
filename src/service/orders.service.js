@@ -226,7 +226,7 @@ const ordersService = (fastify) => {
         timestamp
       );
 
-      executeOrders();
+      return executeOrders();
     }
 
     return false;
@@ -287,7 +287,7 @@ const ordersService = (fastify) => {
                 );
 
                 let buyerDebitAmount = stockPrice * sellOrderFulFilled;
-                if (buyerWallet >= stockPrice * sellOrderFulFilled) {
+                if (buyerWallet >= buyerDebitAmount) {
                   buyOrders[i].fulfilled_quantity += sellOrderFulFilled;
                   sellOrders[j].fulfilled_quantity += buyOrderFulFilled;
                   buyOrders[i].order_status = 'EXECUTED';
@@ -308,7 +308,7 @@ const ordersService = (fastify) => {
                     stockId: sellOrders[j].stock_id,
                     orderId: sellOrders[j].order_id,
                     userId: sellOrders[j].user_id,
-                    quantity: sellOrderFulFilled,
+                    quantity: -sellOrderFulFilled,
                     buyAmount: 0,
                     sellAmount: stockPrice,
                     tradeType: 'SELL',
@@ -356,7 +356,7 @@ const ordersService = (fastify) => {
                     stockId: buyOrders[i].stock_id,
                     orderId: buyOrders[i].order_id,
                     userId: buyOrders[i].user_id,
-                    quantity: sellOrderFulFilled,
+                    quantity: -sellOrderFulFilled,
                     buyAmount: stockPrice,
                     sellAmount: 0,
                     tradeType: 'BUY',
@@ -367,7 +367,7 @@ const ordersService = (fastify) => {
                     stockId: sellOrders[j].stock_id,
                     orderId: sellOrders[j].order_id,
                     userId: sellOrders[j].user_id,
-                    quantity: sellOrderFulFilled,
+                    quantity: -sellOrderFulFilled,
                     buyAmount: 0,
                     sellAmount: stockPrice,
                     tradeType: 'SELL',
@@ -475,7 +475,7 @@ const ordersService = (fastify) => {
                   console.log('buyerWallet', buyerWallet);
                   let buyerDebitAmount = stockPrice * sellOrderFulFilled;
                   console.log('buyerDebitAmount', buyerDebitAmount);
-                  if (buyerWallet >= stockPrice * sellOrderFulFilled) {
+                  if (buyerWallet >= buyerDebitAmount) {
                     buyOrders[i].fulfilled_quantity += sellOrderFulFilled;
                     sellOrders[j].fulfilled_quantity += buyOrderFulFilled;
                     buyOrders[i].order_status = 'EXECUTED';
@@ -496,7 +496,7 @@ const ordersService = (fastify) => {
                       stockId: sellOrders[j].stock_id,
                       orderId: sellOrders[j].order_id,
                       userId: sellOrders[j].user_id,
-                      quantity: sellOrderFulFilled,
+                      quantity: -sellOrderFulFilled,
                       buyAmount: 0,
                       sellAmount: stockPrice,
                       tradeType: 'SELL',
@@ -544,7 +544,7 @@ const ordersService = (fastify) => {
                       stockId: buyOrders[i].stock_id,
                       orderId: buyOrders[i].order_id,
                       userId: buyOrders[i].user_id,
-                      quantity: sellOrderFulFilled,
+                      quantity: -sellOrderFulFilled,
                       buyAmount: stockPrice,
                       sellAmount: 0,
                       tradeType: 'BUY',
@@ -555,7 +555,7 @@ const ordersService = (fastify) => {
                       stockId: sellOrders[j].stock_id,
                       orderId: sellOrders[j].order_id,
                       userId: sellOrders[j].user_id,
-                      quantity: sellOrderFulFilled,
+                      quantity: -sellOrderFulFilled,
                       buyAmount: 0,
                       sellAmount: stockPrice,
                       tradeType: 'SELL',
@@ -651,10 +651,71 @@ const ordersService = (fastify) => {
       }
     }
 
-    const allProcessedOrders = [...buyOrders, ...sellOrders];
+    // BUY STOCK FROM MARKET
+    for (let i = 0; i < buyOrders.length; i++) {
+      buyOrders[i] = parseOrders(buyOrders[i]);
+      if (
+        buyOrders[i].fulfilled_quantity != buyOrders[i].quantity &&
+        buyOrders[i].order_type == 'MARKET' &&
+        (buyOrders[i].order_status == 'PLACED' ||
+          buyOrders[i].order_status == 'PARTIALLY_EXECUTED')
+      ) {
+        let tradingStock = stockPriceMap[buyOrders[i].stock_id];
+        let stockPrice = parseFloat(tradingStock.current_price);
+        let buyerWallet = await getInvestorFundBalanceDao(buyOrders[i].user_id);
+
+        let purchaseQty =
+          buyOrders[i].quantity - buyOrders[i].fulfilled_quantity;
+        let buyerDebitAmount = stockPrice * purchaseQty;
+        if (buyerWallet >= buyerDebitAmount) {
+          buyOrders[i].fulfilled_quantity += purchaseQty;
+          buyOrders[i].order_status = 'EXECUTED';
+          let buyTrade = {
+            stockId: buyOrders[i].stock_id,
+            orderId: buyOrders[i].order_id,
+            userId: buyOrders[i].user_id,
+            quantity: purchaseQty,
+            buyAmount: stockPrice,
+            sellAmount: 0,
+            tradeType: 'BUY',
+            tradeDate: moment().toISOString(),
+          };
+
+          let buyerDebit = {
+            debitAmount: buyerDebitAmount,
+            creditAmount: 0,
+            userId: buyOrders[i].user_id,
+            description: `Alloted  ${buyOrders[i].fulfilled_quantity} stocks of  $${tradingStock.stock_name} for ${stockPrice}`,
+          };
+
+          trades.push(buyTrade);
+          await debitInvestorFundsForTradeDao(buyerDebit);
+          await addNewTrade(buyTrade);
+        } else {
+          buyOrders[i].orderStatus = 'INSUFFICIENT_BALANCE';
+        }
+      }
+    }
+
+    const allProcessedOrders = [];
+
+    buyOrders.forEach((order) => {
+      if (order.order_status != 'PLACED') {
+        allProcessedOrders.push(order);
+      }
+    });
+
+    sellOrders.forEach((order) => {
+      if (order.order_status != 'PLACED') {
+        allProcessedOrders.push(order);
+      }
+    });
+
     // Remove unupdated order
     // Add Direct buy from markets
-    await updateProcessedOrdersDao(allProcessedOrders);
+    if (allPlacedOrders.length > 0) {
+      await updateProcessedOrdersDao(allProcessedOrders);
+    }
     return {
       trades,
       allProcessedOrders,
