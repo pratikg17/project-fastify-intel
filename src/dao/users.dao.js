@@ -172,6 +172,30 @@ const userRepository = (db) => {
     }
   };
 
+  const getMarketHoursDao = async (userId) => {
+    try {
+      const marketHours = await db.one(`select * from market_hours`);
+      return marketHours;
+    } catch (error) {
+      throw Error('failed to fetch investor_funds records from db');
+    }
+  };
+
+  const saveMarketHoursDao = async (ma) => {
+    try {
+      const marketHours = await db.query(
+        `UPDATE market_hours
+      SET start_time=$1, end_time=$2, updated_at=now()
+      WHERE time_id=$3 RETURNING *`,
+        [ma.startTime, ma.endTime, ma.timeId]
+      );
+      return marketHours;
+    } catch (error) {
+      console.log(error);
+      throw Error('failed to fetch time data records from db');
+    }
+  };
+
   return {
     getUserById,
     saveUser,
@@ -185,6 +209,8 @@ const userRepository = (db) => {
     getInvestorWalletHistoryDao,
     debitInvestorFundsForTradeDao,
     creditInvestorFundsForTradeDao,
+    getMarketHoursDao,
+    saveMarketHoursDao,
   };
 };
 

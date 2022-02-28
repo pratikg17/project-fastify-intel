@@ -20,6 +20,8 @@ const userRoute = async (fastify) => {
     getInvestorFundBalance,
     getAllInvestorWalletHistory,
     withdrawInvestorFunds,
+    getMarketHours,
+    saveMarketHours,
   } = UserService(fastify);
 
   fastify.get(
@@ -151,6 +153,25 @@ const userRoute = async (fastify) => {
       }
     }
   );
+
+  fastify.get('/get-market-hours', async (request, reply) => {
+    // authenticate request
+    // append user request.user
+    await fastify.authenticate(request, reply);
+
+    const marketHours = await getMarketHours();
+    reply.code(200).send({ marketHours });
+  });
+
+  fastify.post('/save-market-hours', async (request, reply) => {
+    // authenticate request
+    // append user request.user
+    await fastify.authenticate(request, reply);
+    const mh = request.body;
+    const marketHours = await saveMarketHours(mh);
+
+    reply.code(200).send({ marketHours });
+  });
 };
 
 module.exports = userRoute;

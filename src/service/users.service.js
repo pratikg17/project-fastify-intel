@@ -124,6 +124,24 @@ const userService = (fastify) => {
     return transactions;
   };
 
+  const getMarketHours = async (userId) => {
+    const marketHours = await userRepository.getMarketHoursDao(userId);
+    return {
+      timeId: marketHours.time_id,
+      startTime: marketHours.start_time,
+      endTime: marketHours.end_time,
+    };
+  };
+
+  const saveMarketHours = async (mh) => {
+    const marketHours = await userRepository.saveMarketHoursDao(mh);
+    return {
+      timeId: marketHours.time_id,
+      startTime: marketHours.start_time,
+      endTime: marketHours.end_time,
+    };
+  };
+
   return {
     getUserById,
     createInvestorUser,
@@ -136,6 +154,8 @@ const userService = (fastify) => {
     getAllInvestorWalletHistory,
     getInvestorWalletHistory,
     withdrawInvestorFunds,
+    getMarketHours,
+    saveMarketHours,
   };
 };
 
