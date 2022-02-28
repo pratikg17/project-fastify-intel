@@ -3,7 +3,7 @@ const dao = (db) => {
     try {
       const orders = await db.query(
         `select *, s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price from orders o
-        inner join stocks s on s.stock_id  = o.stock_id order by o.updated_at limit $1 offset $2`,
+        inner join stocks s on s.stock_id  = o.stock_id order by o.created_at limit $1 offset $2`,
         [limit, offset]
       );
 
@@ -17,7 +17,7 @@ const dao = (db) => {
     try {
       const orders = await db.query(
         `select * , s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price from orders o
-        inner join stocks s on s.stock_id = o.stock_id  where user_id = $1  order by o.updated_at ASC`,
+        inner join stocks s on s.stock_id = o.stock_id  where user_id = $1  order by o.created_at DESC`,
         [userId]
       );
       return orders;
