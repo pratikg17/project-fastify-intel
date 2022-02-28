@@ -2,8 +2,8 @@ const dao = (db) => {
   const getOrdersDao = async (limit, offset) => {
     try {
       const orders = await db.query(
-        `select * from orders o
-        inner join stocks s on s.stock_id  = o.stock_id order by o.created_at limit $1 offset $2`,
+        `select *, s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price from orders o
+        inner join stocks s on s.stock_id  = o.stock_id order by o.updated_at limit $1 offset $2`,
         [limit, offset]
       );
 
@@ -16,8 +16,8 @@ const dao = (db) => {
   const getOrdersByUserIdDao = async (userId) => {
     try {
       const orders = await db.query(
-        `select * from orders o
-        inner join stocks s on s.stock_id = o.stock_id  where user_id = $1 order by o.updated_at`,
+        `select * , s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price from orders o
+        inner join stocks s on s.stock_id = o.stock_id  where user_id = $1  order by o.updated_at ASC`,
         [userId]
       );
       return orders;
@@ -44,7 +44,7 @@ const dao = (db) => {
   const getAllOrdersDao = async () => {
     try {
       const orders = await db.query(
-        `select * from orders o inner join stocks s on s.stock_id  = o.stock_id `
+        `select *,s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price  from orders o inner join stocks s on s.stock_id  = o.stock_id `
       );
 
       return orders;
@@ -81,7 +81,7 @@ const dao = (db) => {
   const getAllOrdersByUserIdDao = async (userId) => {
     try {
       const orders = await db.query(
-        `select * from orders o inner join stocks s on s.stock_id  = o.stock_id  where userId=${userId}`
+        `select *, s.stock_id, s.stock_name, s.ticker_name, s.volume, s.initial_price, s.daily_high, s.daily_low, s.current_price from orders o inner join stocks s on s.stock_id  = o.stock_id  where userId=${userId}`
       );
 
       return orders;

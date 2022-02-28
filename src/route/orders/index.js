@@ -22,6 +22,7 @@ const orderRoute = async (fastify) => {
     getTradesByUserId,
     getInvestorPortfolio,
     fluctuateStockPrice,
+    createBuyOrder,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -40,7 +41,7 @@ const orderRoute = async (fastify) => {
       await fastify.authenticate(request, reply);
       const { user_id } = request.query;
       const orders = await getOrdersByUserId(user_id);
-
+      console.log(orders);
       reply.code(200).send({ orders });
     }
   );
@@ -116,6 +117,20 @@ const orderRoute = async (fastify) => {
       await fastify.authenticate(request, reply);
       const order = request.body;
       const orderData = await createOrder(order);
+      reply.code(201).send({ orderId: orderData.order_id });
+    }
+  );
+
+  fastify.post(
+    '/place-buy-order',
+    {
+      schema: { body: postRequestBody },
+    },
+    async (request, reply) => {
+      // authenticate request
+      await fastify.authenticate(request, reply);
+      const order = request.body;
+      const orderData = await createBuyOrder(order);
       reply.code(201).send({ orderId: orderData.order_id });
     }
   );

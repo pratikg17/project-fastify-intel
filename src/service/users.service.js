@@ -13,8 +13,8 @@ const userService = (fastify) => {
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
-      createdAt: moment(user.created_at).format('DD/MM/YYYY'),
-      updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
   };
 
@@ -31,8 +31,8 @@ const userService = (fastify) => {
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
-      createdAt: moment(user.created_at).format('DD/MM/YYYY'),
-      updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
   };
 
@@ -49,8 +49,8 @@ const userService = (fastify) => {
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
-      createdAt: moment(user.created_at).format('DD/MM/YYYY'),
-      updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
       isAdmin: true,
     };
   };
@@ -70,8 +70,8 @@ const userService = (fastify) => {
       firstName: user.first_name,
       lastName: user.last_name,
       email: user.email,
-      createdAt: moment(user.created_at).format('DD/MM/YYYY'),
-      updatedAt: moment(user.updated_at).format('DD/MM/YYYY'),
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
     };
   };
 

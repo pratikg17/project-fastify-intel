@@ -24,6 +24,19 @@ const dao = (db) => {
     }
   };
 
+  const getStockByIdDao = async (stockId) => {
+    try {
+      const stocks = await db.one(
+        `select * from stocks where stock_id = '${stockId}'`
+      );
+
+      return stocks;
+    } catch (error) {
+      console.log(error);
+      throw Error('failed to fetch stocks records from db');
+    }
+  };
+
   const createNewStock = async (stock) => {
     try {
       //  Yearly High / Low , Daily High / Low and current price will be the same
@@ -127,6 +140,7 @@ const dao = (db) => {
     getStocksDao,
     updateStockPricesDao,
     recordStockPriceDao,
+    getStockByIdDao,
   };
 };
 

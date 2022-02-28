@@ -19,8 +19,12 @@ const ordersService = (fastify) => {
     updateProcessedOrdersDao,
   } = OrdersRepository(fastify.db);
 
-  const { getAllStocksDao, updateStockPricesDao, recordStockPriceDao } =
-    StockRepository(fastify.db);
+  const {
+    getAllStocksDao,
+    updateStockPricesDao,
+    recordStockPriceDao,
+    getStockByIdDao,
+  } = StockRepository(fastify.db);
   const {
     getInvestorFundBalanceDao,
     creditInvestorFundsForTradeDao,
@@ -30,6 +34,25 @@ const ordersService = (fastify) => {
   const createOrder = async (orders) => {
     const orderId = await createNewOrder(orders);
     return orderId;
+  };
+
+  const createBuyOrder = async (orders) => {
+    const { stockId, orderType, amount, quantity, userId } = orders;
+    const balance = await getInvestorFundBalanceDao(userId);
+    const stock = await getStockByIdDao(stockId);
+    let amountRequired = 0;
+    if (orderType == 'MARKET') {
+      amountRequired = stock.current_price * quantity;
+    } else {
+      amountRequired = amount * quantity;
+    }
+
+    if (amountRequired > balance) {
+      throw new Error('Insufficient balance to place order');
+    } else {
+      const orderId = await createNewOrder(orders);
+      return orderId;
+    }
   };
 
   const updateOrder = async (orders) => {
@@ -88,8 +111,8 @@ const ordersService = (fastify) => {
       buyAmount: data.buy_amount,
       sellAmount: data.sell_amount,
       // tradeDate: moment(data.trade_date).format('MMM Do YYYY, h:mm:ss a'),
-      createdAt: moment(data.created_at).format('DD/MM/YYYY'),
-      updatedAt: moment(data.updated_at).format('DD/MM/YYYY'),
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
     }));
   };
 
@@ -616,7 +639,7 @@ const ordersService = (fastify) => {
     }
 
     const allProcessedOrders = [...buyOrders, ...sellOrders];
-    // await updateProcessedOrdersDao(allProcessedOrders);
+    await updateProcessedOrdersDao(allProcessedOrders);
     return {
       trades,
       allProcessedOrders,
@@ -654,6 +677,7 @@ const ordersService = (fastify) => {
     getInvestorPortfolio,
     fluctuateStockPrice,
     executeOrders,
+    createBuyOrder,
   };
 };
 
