@@ -203,34 +203,37 @@ const dao = (db) => {
   };
 
   const updateProcessedOrdersDao = async (processedOrders) => {
-    try {
-      //  Yearly High / Low , Daily High / Low and current price will be the same
-      const updateValues = processedOrders.map((order) => {
-        let values = `('${order.order_id}'::uuid, ${order.fulfilled_quantity}, '${order.order_status}'::ORDER_STATUS_TYPE )`;
-        return values;
-      });
+    if (processedOrders.length > 0) {
+      try {
+        //  Yearly High / Low , Daily High / Low and current price will be the same
+        const updateValues = processedOrders.map((order) => {
+          let values = `('${order.order_id}'::uuid, ${order.fulfilled_quantity}, '${order.order_status}'::ORDER_STATUS_TYPE )`;
+          return values;
+        });
 
-      let values = updateValues.join(',');
-      if (updateValues.length < 1) {
-        values = updateValues[0];
+        let values = updateValues.join(',');
+        if (updateValues.length < 1) {
+          values = updateValues[0];
+        }
+
+        const query = `update orders
+        set
+          fulfilled_quantity = tmp.fulfilled_quantity,
+          order_status = tmp.order_status 
+        from ( values  ${updateValues.join(',')}) 
+        as tmp (order_id , fulfilled_quantity, order_status)
+        where
+        orders.order_id = tmp.order_id ;`;
+
+        console.log('query', query);
+        const ordersUpdated = await db.query(query);
+        return ordersUpdated;
+      } catch (error) {
+        console.log(error);
+        throw Error('Not valid process orders data - failed to update in db');
       }
-
-      const query = `update orders
-      set
-        fulfilled_quantity = tmp.fulfilled_quantity,
-        order_status = tmp.order_status 
-      from ( values  ${updateValues.join(',')}) 
-      as tmp (order_id , fulfilled_quantity, order_status)
-      where
-      orders.order_id = tmp.order_id ;`;
-
-      console.log('query', query);
-
-      const ordersUpdated = await db.query(query);
-      return ordersUpdated;
-    } catch (error) {
-      console.log(error);
-      throw Error('Not valid process orders data - failed to update in db');
+    } else {
+      return null;
     }
   };
 
