@@ -23,6 +23,7 @@ const orderRoute = async (fastify) => {
     getInvestorPortfolio,
     fluctuateStockPrice,
     createBuyOrder,
+    createSellOrder,
   } = OrderService(fastify);
 
   fastify.get('/get-all-orders', async (request, reply) => {
@@ -131,6 +132,20 @@ const orderRoute = async (fastify) => {
       await fastify.authenticate(request, reply);
       const order = request.body;
       const orderData = await createBuyOrder(order);
+      reply.code(201).send({ orderId: orderData.order_id });
+    }
+  );
+
+  fastify.post(
+    '/place-sell-order',
+    {
+      schema: { body: postRequestBody },
+    },
+    async (request, reply) => {
+      // authenticate request
+      await fastify.authenticate(request, reply);
+      const order = request.body;
+      const orderData = await createSellOrder(order);
       reply.code(201).send({ orderId: orderData.order_id });
     }
   );

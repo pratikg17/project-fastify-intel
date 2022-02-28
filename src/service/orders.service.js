@@ -55,6 +55,19 @@ const ordersService = (fastify) => {
     }
   };
 
+  const createSellOrder = async (orders) => {
+    const { stockId, quantity, userId } = orders;
+    const stockList = await getInvestorPortfolio(userId);
+    const stock = stockList.find((s) => s.stock_id === stockId);
+    let noOfStock = parseInt(stock.noOfStocks);
+    if (quantity > noOfStock) {
+      throw new Error('Inadequate no. of stocks to place sell order');
+    } else {
+      const orderId = await createNewOrder(orders);
+      return orderId;
+    }
+  };
+
   const updateOrder = async (orders) => {
     const ordersId = await updateOrderDao(orders);
     return ordersId;
@@ -639,6 +652,8 @@ const ordersService = (fastify) => {
     }
 
     const allProcessedOrders = [...buyOrders, ...sellOrders];
+    // Remove unupdated order
+    // Add Direct buy from markets
     await updateProcessedOrdersDao(allProcessedOrders);
     return {
       trades,
@@ -678,6 +693,7 @@ const ordersService = (fastify) => {
     fluctuateStockPrice,
     executeOrders,
     createBuyOrder,
+    createSellOrder,
   };
 };
 
