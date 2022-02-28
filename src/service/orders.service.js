@@ -190,8 +190,7 @@ const ordersService = (fastify) => {
         timestamp
       );
 
-      // executeOrders();
-      return executeOrders();
+      executeOrders();
     }
 
     return false;

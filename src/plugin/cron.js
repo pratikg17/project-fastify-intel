@@ -11,12 +11,12 @@ module.exports = fp(async (fastify, options, next) => {
         // the rest is from the node-cron API:
         // https://github.com/kelektiv/node-cron#api
         cronTime: '* * * * *', // Everyday at midnight UTC
-        // start: true,
+        start: true,
         // Note: the callbacks (onTick & onComplete) take the server
         // as an argument, as opposed to nothing in the node-cron API:
         onTick: async (server) => {
           console.log('Cronjob- start');
-          // await fluctuateStockPrice();
+          await fluctuateStockPrice();
           // console.log(server);
 
           // 1.Check if market is open or not
