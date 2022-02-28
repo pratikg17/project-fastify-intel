@@ -29,8 +29,9 @@ const dao = (db) => {
   const deleteOrderDao = async (orderId) => {
     try {
       const orders = await db.query(
-        `DELETE FROM public.orders
-        WHERE order_id=$1 and order_status ='PLACED' returning *`,
+        `UPDATE orders
+        SET order_status ='CANCELLED'
+        WHERE order_id=$1 returning *`,
         [orderId]
       );
       return orders;
