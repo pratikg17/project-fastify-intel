@@ -16,7 +16,7 @@ module.exports = fp(async (fastify, options, next) => {
         // as an argument, as opposed to nothing in the node-cron API:
         onTick: async (server) => {
           console.log('Cronjob- start');
-          await fluctuateStockPrice();
+          // await fluctuateStockPrice();
           // console.log(server);
 
           // 1.Check if market is open or not

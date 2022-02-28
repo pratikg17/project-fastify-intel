@@ -178,7 +178,7 @@ const ordersService = (fastify) => {
     console.log('isMarketEndTime', isMarketEndTime);
 
     // TODO Change this
-    const isWeekEnd = timestamp.day() % 6 == 0;
+    const isWeekEnd = !(timestamp.day() % 6 == 0);
 
     console.log('isWeekEnd', isWeekEnd);
 
