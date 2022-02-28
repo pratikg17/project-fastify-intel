@@ -227,9 +227,10 @@ const ordersService = (fastify) => {
       );
 
       const stocksPrice = await getAllStocksDao();
+      const formatedStockPrice = format(stocksPrice);
       let socketMsg = {
         isMarketOpen: true,
-        stocks: stocksPrice,
+        stocks: formatedStockPrice,
       };
       fastify.websocketServer.clients.forEach(function each(client) {
         if (client.readyState == 1) {
@@ -239,9 +240,10 @@ const ordersService = (fastify) => {
       return executeOrders();
     }
     const stocksPrice = await getAllStocksDao();
+    const formatedStockPrice = format(stocksPrice);
     let socketMsg = {
       isMarketOpen: false,
-      stocks: stocksPrice,
+      stocks: formatedStockPrice,
     };
     fastify.websocketServer.clients.forEach(function each(client) {
       if (client.readyState == 1) {
