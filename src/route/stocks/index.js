@@ -31,6 +31,23 @@ const stockRoute = async (fastify) => {
     reply.code(200).send({ stocks });
   });
 
+  fastify.get('/get-live-stocks', { websocket: true }, (conn) => {
+    conn.socket.on('message', async (message) => {
+      try {
+        const stocks = await getAllStocks();
+        fastify.websocketServer.clients.forEach(function each(client) {
+          if (client.readyState == 1) {
+            client.send(JSON.stringify(stocks));
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        console.log('Some error occurred');
+        conn.socket.send('Error Occurred');
+      }
+    });
+  });
+
   fastify.post(
     '/',
     {

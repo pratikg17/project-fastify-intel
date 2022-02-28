@@ -1,9 +1,11 @@
 const fastify = require('fastify');
 const cors = require('fastify-cors');
+
 const db = require('./plugin/database');
 const cron = require('./plugin/cron');
 const testRoute = require('./route/tempTestRoute');
 const swaggerPg = require('./plugin/swagger');
+const websocket = require('./plugin/websocket');
 const userRoute = require('./route/users');
 const jobRoute = require('./route/job');
 const stockRoute = require('./route/stocks');
@@ -22,6 +24,7 @@ const build = (opts = {}) => {
   app.register(swaggerPg);
   app.register(authenticate);
   app.register(cron);
+  app.register(websocket);
 
   // register route
   app.register(testRoute, { prefix: 'api/v1/test' });

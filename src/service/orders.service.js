@@ -170,7 +170,7 @@ const ordersService = (fastify) => {
     return data;
   };
 
-  const fluctuateStockPrice = async () => {
+  const fluctuateStockPrice = async (fastify) => {
     console.log('Called fluctuateStockPrice');
     const marketHours = await getMarketHoursDao();
 
@@ -216,7 +216,7 @@ const ordersService = (fastify) => {
         };
       });
 
-      await updateStockPricesDao(formatStockUpdateData);
+      const stocks = await updateStockPricesDao(formatStockUpdateData);
 
       // Record Stock Prices
       await recordStockPriceDao(
@@ -226,9 +226,28 @@ const ordersService = (fastify) => {
         timestamp
       );
 
+      const stocksPrice = await getAllStocksDao();
+      let socketMsg = {
+        isMarketOpen: true,
+        stocks: stocksPrice,
+      };
+      fastify.websocketServer.clients.forEach(function each(client) {
+        if (client.readyState == 1) {
+          client.send(JSON.stringify(socketMsg));
+        }
+      });
       return executeOrders();
     }
-
+    const stocksPrice = await getAllStocksDao();
+    let socketMsg = {
+      isMarketOpen: false,
+      stocks: stocksPrice,
+    };
+    fastify.websocketServer.clients.forEach(function each(client) {
+      if (client.readyState == 1) {
+        client.send(JSON.stringify(socketMsg));
+      }
+    });
     return false;
   };
 

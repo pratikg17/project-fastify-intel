@@ -184,7 +184,7 @@ const orderRoute = async (fastify) => {
   fastify.post('/fluctuate-market', async (request, reply) => {
     // authenticate request
     await fastify.authenticate(request, reply);
-    const data = await fluctuateStockPrice();
+    const data = await fluctuateStockPrice(fastify);
     reply.code(201).send({ data });
   });
 };
