@@ -729,7 +729,7 @@ const ordersService = (fastify) => {
           await debitInvestorFundsForTradeDao(buyerDebit);
           await addNewTrade(buyTrade);
         } else {
-          buyOrders[i].orderStatus = 'INSUFFICIENT_BALANCE';
+          buyOrders[i].order_status = 'INSUFFICIENT_BALANCE';
         }
       }
     }
