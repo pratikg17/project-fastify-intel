@@ -3,7 +3,7 @@ const MIN_PERCENT_CHANGE = 1;
 
 const percentChange = () => {
   // Random number to get the postive or negitive % change
-  let plusOrMinus = Math.random() > 0.3 ? 1 : -1;
+  let plusOrMinus = Math.random() > 0.2 ? 1 : -1;
 
   // Will return a random number between the range
   let changePercent =
