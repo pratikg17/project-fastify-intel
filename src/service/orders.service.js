@@ -230,7 +230,9 @@ const ordersService = (fastify) => {
         };
       });
 
-      const stocks = await updateStockPricesDao(formatStockUpdateData);
+      if (formatStockUpdateData.length > 0) {
+        const stocks = await updateStockPricesDao(formatStockUpdateData);
+      }
 
       // Record Stock Prices
       await recordStockPriceDao(
