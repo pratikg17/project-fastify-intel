@@ -7,7 +7,6 @@ const testRoute = require('./route/tempTestRoute');
 const swaggerPg = require('./plugin/swagger');
 const websocket = require('./plugin/websocket');
 const userRoute = require('./route/users');
-const jobRoute = require('./route/job');
 const stockRoute = require('./route/stocks');
 const orderRoute = require('./route/orders');
 
@@ -29,7 +28,6 @@ const build = (opts = {}) => {
   // register route
   app.register(testRoute, { prefix: 'api/v1/test' });
   app.register(userRoute, { prefix: 'api/v1/users' });
-  app.register(jobRoute, { prefix: 'api/v1/jobs' });
   app.register(stockRoute, { prefix: 'api/v1/stocks' });
   app.register(orderRoute, { prefix: 'api/v1/orders' });
 

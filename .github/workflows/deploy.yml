@@ -2,9 +2,9 @@ name: Fastify Application
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
 jobs:
   build:
@@ -16,9 +16,6 @@ jobs:
       - name: Install Fastify Dependencies
         run: ./batect install-dep
 
-      - name: Perform Linting
-        run: ./batect lint
-
   deploy:
     needs: build
     runs-on: 'ubuntu-latest'
@@ -26,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Login toheroku container registry
+      - name: Login to heroku container registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: heroku container:login
@@ -34,9 +31,9 @@ jobs:
       - name: Build docker image and push to heroku registry
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:push -a fastify-node-server web
+        run: heroku container:push -a intel-stock-server web
 
       - name: Run docker image on heroku
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku container:release -a fastify-node-server web
+        run: heroku container:release -a intel-stock-server web

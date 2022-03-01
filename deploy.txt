@@ -6,10 +6,10 @@ Deploy on heroku - manually
      command:-  heroku container:login
     
  step 3:- Build docker image and push to heroku container registry
-    command:- heroku container:push -a fastify-node-server 
+    command:- heroku container:push -a intel-stock-server 
 
 step 4:- Run docker image on heroku
-   comamnd:- heroku container:release -a fastify-node-server 
+   comamnd:- heroku container:release -a intel-stock-server 
 
 Deploy to heroku with github actions - CD 
 
@@ -34,10 +34,10 @@ Deploy to heroku with github actions - CD
      command:-  heroku container:login
     
  step 3:- Build docker image and push to heroku container registry
-    command:- heroku container:push -a fastify-node-server web
+    command:- heroku container:push -a intel-stock-server web
 
 step 4:- Run docker image on heroku
-   comamnd:- heroku container:release -a fastify-node-server web
+   comamnd:- heroku container:release -a intel-stock-server web
 
 Deploy to heroku with github actions - CD 
 
