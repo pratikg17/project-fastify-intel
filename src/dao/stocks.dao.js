@@ -17,7 +17,9 @@ const dao = (db) => {
 
   const getAllStocksDao = async () => {
     try {
-      const stocks = await db.query(`select * from stocks`);
+      const stocks = await db.query(
+        `select * from stocks order by stock_name asc`
+      );
       const openPrice = await getAllStocksOpenPriceDao();
       const closePrice = await getAllStocksClosePriceDao();
       const openMap = {};
