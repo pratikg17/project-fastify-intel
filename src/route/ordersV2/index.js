@@ -7,7 +7,7 @@ const {
   updateOrderRequestBody,
   deleteOrderReqObj,
   addTradeReqObj,
-} = require('./Orders.schema');
+} = require('./orders.schema');
 
 // mark this function as async - required
 const orderRoute = async (fastify) => {
