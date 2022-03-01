@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 const dao = (db) => {
   const getOrdersDao = async (limit, offset) => {
     try {
@@ -150,6 +152,36 @@ const dao = (db) => {
     }
   };
 
+  const updateExpiredOrderDao = async () => {
+    try {
+      //  Yearly High / Low , Daily High / Low and current price will be the same
+      const { order_id } = await db.query(
+        `UPDATE orders
+        SET  order_status='EXPIRED'
+        WHERE    expiry_date  < $1
+        and order_status = 'PLACED'`,
+        [moment().format('YYYY-MM-DD')]
+      );
+      return order_id;
+    } catch (error) {
+      console.log(error);
+      throw Error('Not valid order data - failed to save in db');
+    }
+  };
+  const deleteOldStockRecordDao = async () => {
+    try {
+      //  Yearly High / Low , Daily High / Low and current price will be the same
+      const { record_id } = await db.query(
+        `delete  from stock_price_records spr where record_date <= $1`,
+        [moment().add(-2, 'd').format('YYYY-MM-DD')]
+      );
+      return record_id;
+    } catch (error) {
+      console.log(error);
+      throw Error('Not valid order data - failed to save in db');
+    }
+  };
+
   const recordNewTrade = async (trade) => {
     try {
       const tradeData = await db.one(
@@ -252,6 +284,8 @@ const dao = (db) => {
     getMarketHoursDao,
     getAllPlacedOrdersDao,
     updateProcessedOrdersDao,
+    updateExpiredOrderDao,
+    deleteOldStockRecordDao,
   };
 };
 

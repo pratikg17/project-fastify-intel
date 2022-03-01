@@ -16,7 +16,9 @@ const ordersService = (fastify) => {
     getInvestorPortfolioDao,
     getMarketHoursDao,
     getAllPlacedOrdersDao,
+    updateExpiredOrderDao,
     updateProcessedOrdersDao,
+    deleteOldStockRecordDao,
   } = OrdersRepository(fastify.db);
 
   const {
@@ -34,6 +36,16 @@ const ordersService = (fastify) => {
   const createOrder = async (orders) => {
     const orderId = await createNewOrder(orders);
     return orderId;
+  };
+
+  const updateExpiredOrder = async () => {
+    const orders = await updateExpiredOrderDao();
+    return orders;
+  };
+
+  const deleteOldStockRecord = async () => {
+    const record = await deleteOldStockRecordDao();
+    return record;
   };
 
   const createBuyOrder = async (orders) => {
@@ -778,6 +790,8 @@ const ordersService = (fastify) => {
     executeOrders,
     createBuyOrder,
     createSellOrder,
+    updateExpiredOrder,
+    deleteOldStockRecord,
   };
 };
 
