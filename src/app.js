@@ -8,7 +8,7 @@ const swaggerPg = require('./plugin/swagger');
 const websocket = require('./plugin/websocket');
 const userRoute = require('./route/users');
 const stockRoute = require('./route/stocks');
-const orderRoute = require('./route/orders');
+const orderRoute = require('./route/ordersV2');
 
 const authenticate = require('./plugin/authenticate');
 
