@@ -123,6 +123,8 @@ const ordersService = (fastify) => {
       tradeId: data.trade_id,
       buyAmount: data.buy_amount,
       sellAmount: data.sell_amount,
+      openPrice: data.openPrice,
+      closePrice: data.closePrice,
       // tradeDate: moment(data.trade_date).format('MMM Do YYYY, h:mm:ss a'),
       createdAt: data.created_at,
       updatedAt: data.updated_at,

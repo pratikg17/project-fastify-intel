@@ -27,6 +27,8 @@ const stockService = (fastify) => {
       dailyLow: stock.daily_low,
       currentPrice: stock.current_price,
       initialPrice: stock.initial_price,
+      openPrice: stock.openPrice,
+      closePrice: stock.closePrice,
       createdAt: moment(stock.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(stock.updated_at).format('DD/MM/YYYY'),
     }));
@@ -44,6 +46,8 @@ const stockService = (fastify) => {
       dailyLow: stock.daily_low,
       currentPrice: stock.current_price,
       initialPrice: stock.initial_price,
+      openPrice: stock.openPrice,
+      closePrice: stock.closePrice,
       createdAt: moment(stock.created_at).format('DD/MM/YYYY'),
       updatedAt: moment(stock.updated_at).format('DD/MM/YYYY'),
     }));

@@ -26,6 +26,12 @@ const postRequestBody = {
     dailyLow: {
       type: 'number',
     },
+    openPrice: {
+      type: 'number',
+    },
+    closePrice: {
+      type: 'number',
+    },
   },
 };
 

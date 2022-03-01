@@ -1,4 +1,5 @@
 const recordStockPriceHelper = require('../plugin/helper/recordStockPrices');
+const moment = require('moment');
 
 const dao = (db) => {
   const getStocksDao = async (limit, offset) => {
@@ -17,9 +18,66 @@ const dao = (db) => {
   const getAllStocksDao = async () => {
     try {
       const stocks = await db.query(`select * from stocks`);
+      const openPrice = await getAllStocksOpenPriceDao();
+      const closePrice = await getAllStocksClosePriceDao();
+      console.log(openPrice);
+      console.log(closePrice);
+      const openMap = {};
+      const closeMap = {};
+
+      openPrice.forEach((s) => (openMap[s.stock_id] = s.current_price));
+      closePrice.forEach((s) => (closeMap[s.stock_id] = s.current_price));
+      console.log('openMap', openMap);
+      let updatedStocks = stocks.map((stock) => {
+        let closePrice = closeMap[stock.stock_id] | (stock.current_price - 100);
+        let openPrice = openMap[stock.stock_id] | (stock.current_price - 100);
+        console.log('OPEN', openPrice);
+        return {
+          ...stock,
+          closePrice,
+          openPrice,
+        };
+      });
+
+      return updatedStocks;
+    } catch (error) {
+      console.log(error);
+      throw Error('failed to fetch stocks records from db');
+    }
+  };
+
+  const getAllStocksOpenPriceDao = async () => {
+    try {
+      const stocks = await db.query(
+        `select distinct (s.stock_id), * from stocks s 
+      join stock_price_records spr on spr .stock_id  = s.stock_id 
+      where record_type  = 'OPEN'
+      and 
+      record_date = $1`,
+        [moment()]
+      );
 
       return stocks;
     } catch (error) {
+      console.log(error);
+      throw Error('failed to fetch stocks records from db');
+    }
+  };
+
+  const getAllStocksClosePriceDao = async () => {
+    try {
+      const stocks = await db.query(
+        `select distinct (s.stock_id), * from stocks s 
+      join stock_price_records spr on spr .stock_id  = s.stock_id 
+      where record_type  = 'CLOSE'
+      and 
+      record_date = $1`,
+        [moment().add(-1, 'd')]
+      );
+
+      return stocks;
+    } catch (error) {
+      console.log(error);
       throw Error('failed to fetch stocks records from db');
     }
   };
