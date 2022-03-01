@@ -20,18 +20,15 @@ const dao = (db) => {
       const stocks = await db.query(`select * from stocks`);
       const openPrice = await getAllStocksOpenPriceDao();
       const closePrice = await getAllStocksClosePriceDao();
-      console.log(openPrice);
-      console.log(closePrice);
       const openMap = {};
       const closeMap = {};
 
       openPrice.forEach((s) => (openMap[s.stock_id] = s.current_price));
       closePrice.forEach((s) => (closeMap[s.stock_id] = s.current_price));
-      console.log('openMap', openMap);
       let updatedStocks = stocks.map((stock) => {
         let closePrice = closeMap[stock.stock_id] | (stock.current_price - 100);
         let openPrice = openMap[stock.stock_id] | (stock.current_price - 100);
-        console.log('OPEN', openPrice);
+
         return {
           ...stock,
           closePrice,
