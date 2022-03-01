@@ -1,4 +1,4 @@
-const MAX_PERCENT_CHANGE = 5;
+const MAX_PERCENT_CHANGE = 3;
 const MIN_PERCENT_CHANGE = 1;
 
 const percentChange = () => {

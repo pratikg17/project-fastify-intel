@@ -23,8 +23,8 @@ const dao = (db) => {
       const openMap = {};
       const closeMap = {};
 
-      openPrice.forEach((s) => (openMap[s.stock_id] = s.current_price));
-      closePrice.forEach((s) => (closeMap[s.stock_id] = s.current_price));
+      openPrice.forEach((s) => (openMap[s.stock_id] = s.price));
+      closePrice.forEach((s) => (closeMap[s.stock_id] = s.price));
       let updatedStocks = stocks.map((stock) => {
         let closePrice = closeMap[stock.stock_id] | (stock.current_price - 100);
         let openPrice = openMap[stock.stock_id] | (stock.current_price - 100);
