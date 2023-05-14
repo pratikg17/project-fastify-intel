@@ -55,7 +55,7 @@ tasks:
     description: Install dependency needtobuild fastify application
     run:
       container: build-stock-fastify-env
-      command: npm install
+      command: npm install -f
   test-ci:
     description: Run Test case in CI mode
     run:
