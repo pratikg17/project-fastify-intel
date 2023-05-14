@@ -82,7 +82,7 @@ tasks:
         JWT_SECRET: supersecretvalue
         TZ: America/New_York
       container: build-stock-fastify-env
-      command: npm run start
+      command: npm run start-prod
       ports:
         - 5000:8080
     dependencies:
